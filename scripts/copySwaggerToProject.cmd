@@ -1,0 +1,1 @@
+bin\ruby22\bin\ruby.exe scripts/webifyJson/webify.rb swagger/swagger.json app swagger.spec app/js/app.swagger.spec.js
