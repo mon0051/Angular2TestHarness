@@ -28,3 +28,7 @@
   content: "";
   padding: 0;
 }
+
+.navbar.navbar-fixed-top {
+  padding:0;
+}

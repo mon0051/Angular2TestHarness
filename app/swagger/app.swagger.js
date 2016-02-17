@@ -7,11 +7,14 @@
 
 	//app.swagger = SwaggerValidator;
 	app.swagger.root = ng.core.Component({
-			selector : 'app-root',
-			templateUrl : 'app/swagger/swagger-input.html'
+			directives: [app.swagger.output,app.swagger.input],
+			selector : 'swagger',
+			templateUrl : 'app/swagger/swagger.html'
 		})
 			.Class({
-				constructor: SwaggerValidator
+				constructor: function SwaggerRoot() {
+					
+				}
 			});
 
 }(window.app || (window.app = {})));

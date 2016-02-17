@@ -1,6 +1,15 @@
 (function ($, app) {
 	var settings = app.settings || (app.settings = {});
 
+	app.swagger.output = ng.core.Component({
+		selector: 'swagger-output',
+		templateUrl: 'app/swagger/swagger-output.html'
+	}).Class({
+		constructor: function SwaggerOutput() {
+			
+		}
+	});
+
 	$(document).ready(function () {
 		var apiEndpoints = function () {
 			var output = "";

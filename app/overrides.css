@@ -6100,3 +6100,7 @@ a.badge:focus {
     min-width: 640px ;
   }
 }
+
+.navbar-fixed-top{
+  padding:0;
+}

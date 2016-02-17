@@ -1,95 +1,52 @@
 <html>
 <head>
-  <title>Angular 2 QuickStart</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="node_modules/tether/dist/css/tether.min.css">
-  <!-- 1. Load libraries -->
-  <!-- IE required polyfill -->
+    <title>Angular 2 QuickStart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="node_modules/tether/dist/css/tether.min.css">
+    <!-- 1. Load libraries -->
+    <!-- IE required polyfill -->
 
-  <script src="app/init.js"></script>
-  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="app/overrides.css">
+    <script src="app/init.js"></script>
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="app/overrides.css">
 
 </head>
 
 <body>
-  <app-root>
-  </app-root>
 
-  <div class="container-fluid middle">
-    <div class="row">
-      <div class="row-fluid">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-          <div class="row" style="height: 72px;"></div>
-          <div class="row">
-            <div class="col-md-12"><h2>Test Interface</h2></div>
-          </div>
-          <div class="row-fluid">
-            <div class="col-md-6 well-large big-column blue">
-              <h3>Request</h3>
-              <form id="send">
-                <h4 class="help-block">Credentials</h4>
-                <p class="text-info">
-                  The username and password must be valid in both CIRTS <i>and</i> the server running the WebService
-                </p>
-
-                <div class="form-group">
-                  <label for="username"><h5>Username</h5></label>
-                  <input type="text" class="form-control" id="username" placeholder="Username">
-                </div>
-
-                <div class="form-group">
-                  <label for="password"><h5>Password</h5></label>
-                  <input type="password" class="form-control" id="password" placeholder="Password" name="password"
-                         autocomplete="off">
-                </div>
-
-                <div class="form-group">
-                  <label for="apiid"><h5>API Name</h5></label>
-                  <input type="text" class="form-control" id="apiid" placeholder="API Name" value="test_1">
-                </div>
-
-                <div class="form-group">
-                  <label for="apikey"><h5>API Key</h5></label>
-                  <input type="password" class="form-control" id="apikey" placeholder="API Key"
-                         value="MQpE1iRhe3jPfNQL/CIoRg==">
-                </div>
-                <div class="form-group">
-                  <h4 class="help-block">Request</h4>
-                  <h5>Endpoint</h5>
-                  <div id="swagger-generated-input"></div>
-                  <label for="resource"><h5>Query</h5></label>
-                  <input type="text" class="form-control" id="resource" placeholder="Resource" value="client">
-                  <label for="parameters"><h5>Uri Parameters</h5></label>
-                  <input type="text" class="form-control" id="parameters" placeholder="Parameters" value="7157">
-                </div>
-                <button type="submit" class="btn btn-large btn-primary pull-right">Submit</button>
-              </form>
-            </div>
-            <div class="col-md-6">
-              <h3>Response</h3>
-              <p class="text-info">If you do not get a proper error code here, check the developer tools console</p>
-              <pre id="result" style="height:450px;overflow:scroll"></pre>
-              <h3>Swagger Validation</h3>
-              <div class="well well-small" style="height:450px;overflow:scroll;">
-                <div id="swagger-errors"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="row"><h2>Swagger Info</h2></div>
-            <div class="row">
-              <h4>Endpoints</h4>
-              <div id="swagger-output"></div>
-            </div>
-          </div>
+<div class="container-fluid">
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <a class="brand">
+                <img src="app/img/logo.png" style="width:42px;height:42px;">
+                CIRTS WebApi Test Harness
+            </a>
         </div>
-      </div>
-      <div class="page-end"></div>
     </div>
-  </div>
-  <footer>
+</div>
+<app-root>
+</app-root>
+
+<div class="container-fluid middle">
+    <div class="row">
+        <div class="row-fluid">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="row" style="height: 72px;"></div>
+                <div class="row">
+                    <div class="col-md-12"><h2>Test Interface</h2></div>
+                </div>
+                <div class="row-fluid">
+
+
+                </div>
+
+            </div>
+        </div>
+        <div class="page-end"></div>
+    </div>
+</div>
+<footer>
     <script src="node_modules/es6-shim/es6-shim.js"></script>
     <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.umd.js"></script>
@@ -104,15 +61,19 @@
     <script src="app/common/messages.js"></script>
     <script src="app/cirts/cirts.js"></script>
     <script src="app/cirts/explore.js"></script>
+
     <script src="app/swagger/app.swagger.spec.js"></script>
-    <script src='app/swagger/app.swagger.js'></script>
+    <script src="app/swagger/app.swagger.output.js"></script>
     <script src='app/swagger/app.swagger.util.js'></script>
+    <script src="app/swagger/app.swagger.input.js"></script>
     <script src="app/swagger/app.swagger.validation.js"></script>
-    <script src="app/swagger/app.swagger.render.js"></script>
-    <script src="app/swagger/app.swagger.render.inputs.js"></script>
+    <script src='app/swagger/app.swagger.js'></script>
+
     <script src="app/nav/app.navbar.js"></script>
 
     <script src='app/main.js'></script>
-  </footer>
+
+    <script type="text/ng-template" id="swagger-input.html" src="app/nav/navbar.html"></script>
+</footer>
 </body>
 </html>

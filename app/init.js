@@ -1,10 +1,3 @@
-window.using = function(namespace,getMeOrMakeMe){
-	if(window[namespace] === undefined){
-		window[namespace] = {};
-	}
+window.app = {};
+window.app.swagger = {};
 
-	if(window[namespace][getMeOrMakeMe] === undefined){
-		return (window[getMeOrMakeMe] = {});
-	}
-	return getMeOrMakeMe;
-};

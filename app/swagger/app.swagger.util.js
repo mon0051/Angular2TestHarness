@@ -1,59 +1,9 @@
-(function (app) {
+(function (app, $) {
 	'use strict';
-	var $ = jQuery;
-	var swagger = app.swagger || (app.swagger={});
-	var util = swagger.util || (swagger.util = {});
-
-	util.paths = swagger.spec.paths;
-
-	util.resourcePathTemplate = function () {
-		return "/" + $("#endpoint-selector").val();
-	};
-
-	util.output = function () {
-		return $("#swagger-errors");
-	};
-
-	util.show = function (message) {
-		swagger.output().append(message);
-	};
-
-	util.clearMessages = function () {
-		swagger.output().empty();
-	};
-
-	util.input = function () {
-		return $("#swagger-generated-input");
-	};
-
-	var show = util.show;
-
-	util.getRequestModel = function () {
-		var endpoints = util.resourcePathTemplate().split("/");
-
-		var pathBuilder = [];
-
-		function PathObject(n, t) {
-			this.name = n;
-			this.valueType = t;
-		}
-
-		endpoints.forEach(function (value) {
-			if (value === "") {
-				return;
-			}
-			if (value.endsWith('}')) {
-				pathBuilder[pathBuilder.length] = new PathObject(value.replace('{', '').replace('}', ''), "parameter");
-			} else {
-				pathBuilder[pathBuilder.length] = new PathObject(value, "pathComponent");
-			}
-		});
-
-		return pathBuilder;
-	};
+    var util = app.swagger.util || (app.swagger.util = {});
 
 	util.getSchemaProperties = function () {
-		var schema = swagger.paths[swagger.resourcePathTemplate()].get.responses["200"].schema;
+		var schema = app.swagger.spec.paths[app.swagger.util.resourcePathTemplate()].get.responses["200"].schema;
 		var properties = {};
 		if (schema.items) {
 			properties = schema.items.properties;
@@ -108,4 +58,4 @@
 			}
 		}
 	};
-}(window.app || (window.app = {})));
+}(window.app || (window.app = {}), jQuery));
