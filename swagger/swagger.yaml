@@ -9,6 +9,15 @@ paths:
         Will take a number of parameters, search the CIRTS database, and
         return a list of clients that match the given parameters.
 
+        **Important!**
+
+        A query must have at least one of the following parameters provided to be a valid query.
+        1. GivenNames (At least 3 characters, will match on partial) _This will also search aliases_
+        2. FamilyName (At least 3 characters, will match on partial)
+        3. CirtsId (Will match exact only, so provide full id if using)
+
+        Only one LWBLocation can be searched at once, defaulting to Australia. **If you do not provide an LwbLocation only results from Australia will be returned.**
+
         #### Example Usage ####
 
         Given that the database contains the following **client** data
@@ -49,22 +58,20 @@ paths:
         }
         ```
 
-
       parameters:
         -
           name: cirtsId
           in: query
           description: |
-            The CirtsId of the client you are searching for. You can expect to only get one
-            result if this is specified correctly. Format is CLXXXXX
+            The CirtsId of the client you are searching for. You can expect to only get one result if this is specified correctly. Format is CLXXXXX
           required: false
           type: string
-          format: integer
+          format: CLXXXXX
         -
           name: givenNames
           in: query
           description: |
-            The given name/s of the client/s you are searching for. Seperate names by a space.
+            The given name/s of the client/s you are searching for. Seperate names by a space. If the client is only or primarily know by a nickname, they may have an alias saved in their personal details. This parameter will also return results where it matchs the clients alias.
           required: false
           type: string
           format: text
@@ -74,16 +81,6 @@ paths:
           description: |
             The family name of the client. Not all clients have a provided family name, these records
             have a family name with an empty string or whitespace as value, which is not the same as a null value.
-          required: false
-          type: string
-          format: text
-        -
-          name: alias
-          in: query
-          description: |
-            If the client is only or primarily know by a nickname, they may have an alias saved in their personal details.
-            This detail is not required when creating a record however, so it may not be present. You may want to try removing this
-            field if you do not get the expected response.
           required: false
           type: string
           format: text
@@ -132,7 +129,7 @@ paths:
           name: dateOfBirthLow
           in: query
           description: |
-            Lowest dateOfBirth to be returned in search results
+            Lowest dateOfBirth to be returned in search results.
           required: false
           type: string
           format: YYYYMMDD
@@ -140,14 +137,15 @@ paths:
           name: dateOfBirthHigh
           in: query
           description: |
-            Maximum dateOfBirth to be returned in search results
+            Maximum dateOfBirth to be returned in search results.
           required: false
           type: string
           format: YYYYMMDD
         -
           name: gender
           in: query
-          description: 'Client gender. Valid inputs are Male, Female, Unknown, None, Other'
+          description: |
+            'Client gender. Valid inputs are Male, Female, Unknown, None, Other'. None is the default and will return results from any gender.
           required: false
           type: string
           format: text
@@ -172,6 +170,8 @@ paths:
                 cirtsId:
                   type: string
                   format: CLXXXXX
+                  description: |
+                    The CirtsId of the client
                 dateOfBirth:
                   type: string
                   format: YYYYMMDD
@@ -179,6 +179,8 @@ paths:
                     Will always be returned in this format. Manipulation client side is trivial to display in other formats.
                 lwbRegion:
                   type: string
+                  description: |
+                    The region from which LWB provides services to the client
         400:
           description: 'Malformed Request Provided'
           schema:
@@ -195,7 +197,6 @@ paths:
           description: 'Server Error'
           schema:
             $ref: '#/definitions/ServerError'
-
   /clients/{cirtsId}:
     get:
       description: |
@@ -203,12 +204,12 @@ paths:
       parameters:
       -
         name: cirtsId
-        in: query
+        in: path
         description: |
-          Client CirtsId. Must be provided without alphabetic prefix. eg. 1000 is valid CL1000 is not valid.
-        type: number
+          Client CirtsId. Must be provided with alphabetic prefix. eg. CL1000 is valid 1000 is not valid.
+        type: string
         required: true
-        format: Minimum 4 digit numerical code
+        format: CLXXXXX
       responses:
         200:
           description: |
@@ -219,7 +220,9 @@ paths:
             properties:
               cirtsId:
                 type: string
-                format: CLXXXXXX
+                format: CLXXXXXX,
+                description: |
+                  The CirtsId of the client in question. Will be in the format CLXXXX
               givenNames:
                 type: string
                 format: text
@@ -242,6 +245,8 @@ paths:
                   Age can be calculated using this value. May be an estimate.
               primaryLanguage:
                 type: string
+                description: |
+                  The primary language spoken by the client
               indigenousStatus:
                 type: string
                 description: |
@@ -249,10 +254,11 @@ paths:
               phoneNumber:
                 type: string
                 description: |
-                  As phone numbers are often given with brackets and non-numerical prefixes, this is a string
-                  and not a number as might be expected.
+                  As phone numbers are often given with brackets and non-numerical prefixes, this is a string and not a number as might be expected.
               primaryServiceType:
                 type: string
+                description: |
+                  The Primary service that is provided by LWB to the client
               medicare:
                 type: string
                 description: |
@@ -290,10 +296,10 @@ paths:
         name: cirtsId
         in: path
         description: |
-          Client CirtsId. Must be provided without alphabetic prefix. eg. 1000 is valid CL1000 is not valid.
-        type: number
+          Client CirtsId. Must be provided with alphabetic prefix. eg. CL1000 is valid 1000 is not valid.
+        type: string
         required: true
-        format: Minimum 4 digit numerical code
+        format: CLXXXX
       responses:
         200:
           description: |
@@ -331,10 +337,10 @@ paths:
         name: cirtsId
         in: path
         description: |
-          Client CirtsId. Must be provided without alphabetic prefix. eg. 1000 is valid CL1000 is not valid.
-        type: number
+          Client CirtsId. Must be provided with alphabetic prefix. eg. CL1000 is valid 1000 is not valid.
+        type: string
         required: true
-        format: Minimum 4 digit numerical code
+        format: CLXXXX
       responses:
         200:
           description: |
@@ -343,12 +349,17 @@ paths:
             title: KeyWorker
             type: object
             properties:
-              firstName:
+              givenNames:
                 type: string
+                description: |
+                  Given Names of the worker
               familyName:
                 type: string
-              id:
+                description: |
+                  Family name of the Worker
+              keyWorkerId:
                 type: string
+                format: WXXXXX
         400:
           description: 'Malformed Request Provided'
           schema:

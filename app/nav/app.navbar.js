@@ -1,11 +1,13 @@
-(function (app) {
+(function (app,ng) {
+	'use strict';
+
 	app.navbar = ng.core.Component({
 			selector: 'ng-navbar',
 			templateUrl: 'app/nav/navbar.html'
 		})
 		.Class({
 			constructor: function () {
-				this.test = "testing"
+				this.test = "testing";
 			}
 		});
-}(window.app || (window.app = {})));
+}(window.app || (window.app = {}), ng));

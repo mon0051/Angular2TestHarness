@@ -1,29 +1,32 @@
-(function ($, app) {
-	var settings = app.settings || (app.settings = {});
-
-	app.swagger.output = ng.core.Component({
-		selector: 'swagger-output',
-		templateUrl: 'app/swagger/swagger-output.html'
-	}).Class({
-		constructor: function SwaggerOutput() {
-			
-		}
-	});
-
-	$(document).ready(function () {
-		var apiEndpoints = function () {
-			var output = "";
-
-			for (var pathTemplate in window.app.swagger.spec.paths) {
-				if (window.app.swagger.spec.paths.hasOwnProperty(pathTemplate)) {
-					output += pathTemplate + "<br>";
-				}
-			}
-			return output;
-		};
-
-		$('#swagger-output').html(apiEndpoints());
-		$('#password').val(settings.password);
-		$('#username').val(settings.fullUserName());
-	});
-}(jQuery, window.app || (window.app = {})));
+System.register([], function(exports_1) {
+    var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = (this && this.__metadata) || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var SwaggerOutput;
+    return {
+        setters:[],
+        execute: function() {
+            SwaggerOutput = (function () {
+                function SwaggerOutput(opts) {
+                    this.settings = opts;
+                }
+                SwaggerOutput = __decorate([
+                    Component({
+                        selector: 'swagger-output',
+                        templateUrl: 'app/swagger/swagger-output.html',
+                    }), 
+                    __metadata('design:paramtypes', [Object])
+                ], SwaggerOutput);
+                return SwaggerOutput;
+            })();
+            exports_1("SwaggerOutput", SwaggerOutput);
+        }
+    }
+});
+//# sourceMappingURL=app.swagger.output.js.map

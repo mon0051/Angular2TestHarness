@@ -1,61 +1,47 @@
-(function (app, $) {
-	'use strict';
-    var util = app.swagger.util || (app.swagger.util = {});
-
-	util.getSchemaProperties = function () {
-		var schema = app.swagger.spec.paths[app.swagger.util.resourcePathTemplate()].get.responses["200"].schema;
-		var properties = {};
-		if (schema.items) {
-			properties = schema.items.properties;
-		} else {
-			properties = schema.properties;
-		}
-		return properties;
-	};
-
-	util.validateTitle = function (title) {
-		var schemaTitle = util.paths[util.resourcePathTemplate()].get.responses["200"].schema.title;
-
-		if (schemaTitle === title) {
-			show(app.messages.h4("Found Expected Object : " + JSON.stringify(title) + " : {...}"));
-		} else {
-			show("For endpoint \"" + util.resourcePathTemplate() + "\" ");
-			show(" unexpected object found \"" + title + "\"\n");
-			throw "unexpected object";
-		}
-	};
-
-	util.validatePropertyType = function (responsePropertyKey, responsePropertyValue) {
-		var expectedProperties = swagger.getSchemaProperties();
-		var expectedType = expectedProperties[responsePropertyKey].type;
-
-		if (typeof responsePropertyValue === expectedType) {
-			show(app.messages.correctType(expectedType, typeof responsePropertyValue));
-		} else {
-			show(app.messages.incorrectType(expectedType, typeof responsePropertyValue));
-		}
-	};
-
-	util.validatePropertyExpected = function (responsePropertyKey) {
-		var expectedProperties = swagger.getSchemaProperties();
-
-		if (expectedProperties[responsePropertyKey] === undefined) {
-			show(app.messages.propertyWasNotExpected(responsePropertyKey));
-			return false;
-
-		} else {
-			show(app.messages.propertyWasExpected(responsePropertyKey));
-			return true;
-		}
-	};
-
-	util.ensureAllPropertiesExist = function (responseObject) {
-		var expectedProperties = swagger.getSchemaProperties();
-
-		for (var prop in expectedProperties) {
-			if (expectedProperties.hasOwnProperty(prop) && responseObject[prop] === undefined) {
-				swagger.output().append("<p class=\"text-error\"> Property from schema " + prop + " is missing </p>");
-			}
-		}
-	};
-}(window.app || (window.app = {}), jQuery));
+(function (app, ng) {
+    'use strict';
+    app.swagger.SwaggerSpec = ng.core.Class({
+        constructor: function () {
+            this.swagger = app.swagger.swagger;
+        }
+    });
+    function SwaggerUtility() {
+        this.getSchemaProperties = function (schema) {
+            var properties = {};
+            if (schema.items !== undefined) {
+                properties = schema.items.properties;
+            }
+            else {
+                properties = schema.properties;
+            }
+            return properties;
+        };
+        this.validateTitle = function (title, path) {
+            var schemaTitle = path.get.responses["200"].schema.title;
+            return schemaTitle === title;
+        };
+        this.validatePropertyType = function (responsePropertyKey, responsePropertyValue, schema) {
+            var expectedProperties = this.getSchemaProperties(schema);
+            var expectedType = expectedProperties[responsePropertyKey].type;
+            return typeof responsePropertyValue === expectedType;
+        };
+        this.validatePropertyExpected = function (property, schema) {
+            var expectedProperties = this.getSchemaProperties(schema);
+            return expectedProperties[property] !== undefined;
+        };
+        this.getMissingProperties = function (responseObject, paths) {
+            var expectedProperties = this.getSchemaProperties(paths);
+            var missingProperties = [];
+            for (var prop in expectedProperties) {
+                if (expectedProperties.hasOwnProperty(prop) && responseObject[prop] === undefined) {
+                    missingProperties[missingProperties.length] = prop;
+                }
+            }
+            return missingProperties;
+        };
+    }
+    app.swagger.SwaggerUtilityProvider = ng.core.Class({
+        constructor: SwaggerUtility
+    });
+}(window.app || (window.app = {}), ng));
+//# sourceMappingURL=app.swagger.util.js.map

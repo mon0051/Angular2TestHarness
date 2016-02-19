@@ -1,79 +1,82 @@
 <html>
 <head>
-    <title>Angular 2 QuickStart</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="node_modules/tether/dist/css/tether.min.css">
-    <!-- 1. Load libraries -->
-    <!-- IE required polyfill -->
+  <title>Angular2 TestHarness</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="node_modules/tether/dist/css/tether.min.css">
+  <!-- 1. Load libraries -->
+  <!-- IE required polyfill -->
 
-    <script src="app/init.js"></script>
-    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="app/overrides.css">
+  <script src="app/init.ts"></script>
+  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="app/overrides.css">
 
 </head>
 
-<body>
+<body id="body">
 
-<div class="container-fluid">
+  <div class="container-fluid">
     <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <a class="brand">
-                <img src="app/img/logo.png" style="width:42px;height:42px;">
-                CIRTS WebApi Test Harness
-            </a>
-        </div>
+      <div class="navbar-inner">
+        <a class="brand">
+          <img src="app/img/logo.png" style="width:42px;height:42px;">
+          CIRTS WebApi Test Harness
+        </a>
+      </div>
     </div>
-</div>
-<app-root>
-</app-root>
+  </div>
+  <app-root>
+  </app-root>
 
-<div class="container-fluid middle">
+  <div class="container-fluid middle">
     <div class="row">
-        <div class="row-fluid">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <div class="row" style="height: 72px;"></div>
-                <div class="row">
-                    <div class="col-md-12"><h2>Test Interface</h2></div>
-                </div>
-                <div class="row-fluid">
+      <div class="row-fluid">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="row" style="height: 72px;"></div>
+          <div class="row">
+            <div class="col-md-12"><h2>Test Interface</h2></div>
+          </div>
+          <div class="row-fluid">
 
 
-                </div>
+          </div>
 
-            </div>
         </div>
-        <div class="page-end"></div>
+      </div>
+      <div class="page-end"></div>
     </div>
-</div>
-<footer>
+  </div>
+  <footer>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/tether/dist/js/tether.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
     <script src="node_modules/es6-shim/es6-shim.js"></script>
     <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.umd.js"></script>
     <script src="node_modules/angular2/bundles/angular2-all.umd.js"></script>
 
-    <script src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="node_modules/tether/dist/js/tether.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="app/app-init.js"></script>
 
     <script src="app/settings/settings.js"></script>
     <script src="app/common/sha256.js"></script>
     <script src="app/common/messages.js"></script>
     <script src="app/cirts/cirts.js"></script>
     <script src="app/cirts/explore.js"></script>
+    <script src="app/cirts-pipes/app.cirts-http-pipe.js"></script>
 
     <script src="app/swagger/app.swagger.spec.js"></script>
     <script src="app/swagger/app.swagger.output.js"></script>
     <script src='app/swagger/app.swagger.util.js'></script>
-    <script src="app/swagger/app.swagger.input.js"></script>
+    <script src="app/swagger/app-swagger-input.js"></script>
     <script src="app/swagger/app.swagger.validation.js"></script>
-    <script src='app/swagger/app.swagger.js'></script>
+    <script src='app/swagger/app.swagger.ts'></script>
 
     <script src="app/nav/app.navbar.js"></script>
 
-    <script src='app/main.js'></script>
+    <script src='app/main.ts'></script>
 
     <script type="text/ng-template" id="swagger-input.html" src="app/nav/navbar.html"></script>
-</footer>
+  </footer>
 </body>
 </html>

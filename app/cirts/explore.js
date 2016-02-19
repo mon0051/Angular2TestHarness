@@ -1,10 +1,8 @@
 var app = app;
 
-(function($, cirts, document, swagger,settings){
+(function ($, cirts, document, swagger, settings) {
 	'use strict';
 	var util = app.swaggerUtils;
-
-
 
 	$(function () {
 		var output = $('#result');
@@ -16,7 +14,7 @@ var app = app;
 				$('#password').val()
 			);
 			output.html('Sending...');
-			cirts.get($('#endpoint-selector').val()+$('#resource').val(),
+			cirts.get($('#endpoint-selector').val() + $('#resource').val(),
 				function (result) {
 					output.html(JSON.stringify(result, null, 4));
 					window.app.swaggerUtils.validateResponse(result);

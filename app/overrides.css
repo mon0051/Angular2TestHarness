@@ -3718,7 +3718,7 @@ table th[class*="span"],
   border-width: 5px 0 5px 5px;
   border-left-color: #cccccc;
   margin-top: 5px;
-  margin-right: 0px;
+  margin-right: 0;
 }
 .dropdown-submenu:hover > a:after {
   border-left-color: #333;
@@ -5782,7 +5782,7 @@ a.badge:focus {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 .progress .bar {
-  width: 0%;
+  width: 0;
   height: 100%;
   color: #fff;
   float: left;
@@ -6103,4 +6103,8 @@ a.badge:focus {
 
 .navbar-fixed-top{
   padding:0;
+}
+
+#body input.form-control {
+ border-radius: 0;
 }

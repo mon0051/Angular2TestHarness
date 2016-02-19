@@ -9,31 +9,28 @@
  * WebService, so that if any credentials are forgotten about in here, they will not be
  * useful harmful for external parties / harmful.
  */
-
-(function(app){
-  'use strict';
-  app.settings = function () {
-
-    var uname = "valid.user"; // Change To username
-    var pword = "nnIZcFYT1!"; // Change To Default Password
-    var dmain = "KIT75519";   // Change to Domain Name, use '.'for local machine
-    var full = function () {
-      return dmain + "\\" + uname;
-    };
-
-    var _host = 'http://localhost'; // You may need to change this if you aren't hosting the webservice locally
-    var _basePath = '/Lwb.Cirts.WebService/api/'; // You "may" need to change this if hosting on another machine
-
+System.register([], function(exports_1) {
+    var AppSettings;
     return {
-      username: uname,
-      password: pword,
-      domain: dmain,
-      fullUserName: full,
-      host: _host,
-      basePath: _basePath,
-      apiId: "test_1", // You may need to change this if you are testing with another key
-      apiKey: "MQpE1iRhe3jPfNQL/CIoRg==" // You may need to change this if you are testing with another key
-    };
-  }();
-
-}(window.app || (window.app = {})));
+        setters:[],
+        execute: function() {
+            AppSettings = (function () {
+                function AppSettings() {
+                    this.username = "valid.user"; // Change To username
+                    this.password = "nnIZcFYT1!"; // Change To Default Password
+                    this.domain = "KIT75519"; // Change to Domain Name, use '.'for local machine
+                    this.host = 'http://localhost'; // You may need to change this if you aren't hosting the webservice locally
+                    this.basePath = '/Lwb.Cirts.WebService/api/'; // You "may" need to change this if hosting on another machine
+                    this.apiId = "test_1";
+                    this.apiKey = "MQpE1iRhe3jPfNQL/CIoRg==";
+                }
+                AppSettings.prototype.fullUserName = function () {
+                    return this.domain + "\\" + this.username;
+                };
+                return AppSettings;
+            })();
+            exports_1("AppSettings", AppSettings);
+        }
+    }
+});
+//# sourceMappingURL=settings.js.map

@@ -36,7 +36,7 @@ window.app = window.app || {};
     o.call = function (method, resource, contents, success, fail, params) {
         var contentString = (contents ? JSON.stringify(contents) : null);
         var nonce = o.generateId();
-        $.ajax(settings.host + settings.basePath + resource,
+        /*$.ajax(settings.host + settings.basePath + resource,
             {
                 method: method,
                 contentType: 'application/json',
@@ -52,7 +52,7 @@ window.app = window.app || {};
                 }
             })
             .done(success)
-            .fail(fail);
+            .fail(fail);*/
     };
 
     o.get = function (resource, success, fail,params) {
