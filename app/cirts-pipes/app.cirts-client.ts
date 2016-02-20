@@ -1,5 +1,6 @@
 import {AppSettings} from "../settings/settings";
-import {jQuery} from 'jquery';
+import * as jQuery from 'jquery';
+import JSSHA from 'jsSHA';
 
 export class CirtsClient {
 	settings:AppSettings;
@@ -18,6 +19,29 @@ export class CirtsClient {
 		sha.update(sig);
 
 		return sha.getHMAC('B64');
+	};
+
+	generateId(len?) {
+		var p = this.settings;
+		var zeroString = (function (l) {
+			if (!l) {
+				return '0000000000000000';
+			}
+			if (typeof l !== "number") {
+				throw "Bad Input for CirtsClint.generateId(len)";
+			}
+
+			var result = "";
+
+			while (l > 0) {
+				l++;
+				result += "0";
+			}
+			return result;
+
+		}(len));
+
+		return (Math.random().toString(36) + zeroString).slice(2, 16);
 	};
 
 	call (method, resource, contents, success, fail, params) {
@@ -54,28 +78,7 @@ export class CirtsClient {
 		return signature;
 	};
 
-	generateId (len) {
 
-		var zeroString = (function (l) {
-			if (!l) {
-				return '0000000000000000';
-			}
-			if (typeof l !== "number") {
-				throw "Bad Input for CirtsClint.generateId(len)";
-			}
-
-			var result = "";
-
-			while (l > 0) {
-				l++;
-				result += "0";
-			}
-			return result;
-
-		}(len));
-
-		return (Math.random().toString(36) + zeroString).slice(2, 16);
-	};
 
 	constructor() {
 		this.settings = new AppSettings();

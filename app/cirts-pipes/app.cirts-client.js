@@ -1,13 +1,13 @@
 System.register(["../settings/settings", 'jquery'], function(exports_1) {
-    var settings_1, jquery_1;
+    var settings_1, jQuery;
     var CirtsClient;
     return {
         setters:[
             function (settings_1_1) {
                 settings_1 = settings_1_1;
             },
-            function (jquery_1_1) {
-                jquery_1 = jquery_1_1;
+            function (jQuery_1) {
+                jQuery = jQuery_1;
             }],
         execute: function() {
             CirtsClient = (function () {
@@ -30,10 +30,29 @@ System.register(["../settings/settings", 'jquery'], function(exports_1) {
                     return sha.getHMAC('B64');
                 };
                 ;
+                CirtsClient.prototype.generateId = function (len) {
+                    var p = this.settings;
+                    var zeroString = (function (l) {
+                        if (!l) {
+                            return '0000000000000000';
+                        }
+                        if (typeof l !== "number") {
+                            throw "Bad Input for CirtsClint.generateId(len)";
+                        }
+                        var result = "";
+                        while (l > 0) {
+                            l++;
+                            result += "0";
+                        }
+                        return result;
+                    }(len));
+                    return (Math.random().toString(36) + zeroString).slice(2, 16);
+                };
+                ;
                 CirtsClient.prototype.call = function (method, resource, contents, success, fail, params) {
                     var contentString = (contents ? JSON.stringify(contents) : null);
                     var nonce = this.generateId();
-                    jquery_1.jQuery.ajax(this.settings.host + this.settings.basePath + resource, {
+                    jQuery.ajax(this.settings.host + this.settings.basePath + resource, {
                         method: method,
                         contentType: 'application/json',
                         data: contentString,
@@ -60,24 +79,6 @@ System.register(["../settings/settings", 'jquery'], function(exports_1) {
                         signature = signature + contents + '\n';
                     }
                     return signature;
-                };
-                ;
-                CirtsClient.prototype.generateId = function (len) {
-                    var zeroString = (function (l) {
-                        if (!l) {
-                            return '0000000000000000';
-                        }
-                        if (typeof l !== "number") {
-                            throw "Bad Input for CirtsClint.generateId(len)";
-                        }
-                        var result = "";
-                        while (l > 0) {
-                            l++;
-                            result += "0";
-                        }
-                        return result;
-                    }(len));
-                    return (Math.random().toString(36) + zeroString).slice(2, 16);
                 };
                 ;
                 return CirtsClient;
