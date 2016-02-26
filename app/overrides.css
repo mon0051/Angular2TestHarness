@@ -6108,3 +6108,10 @@ a.badge:focus {
 #body input.form-control {
  border-radius: 0;
 }
+
+code#result,code#swagger-output{
+  white-space: pre;
+  display: block;
+  border-radius: 0;
+}
+

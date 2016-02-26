@@ -1,15 +1,15 @@
 import {AppSettings} from "../settings/settings";
-import * as jQuery from 'jquery';
-import JSSHA from 'jsSHA';
+declare var jQuery:any;
+declare var jsSHA:any;
 
 export class CirtsClient {
 	settings:AppSettings;
-	httpGet (resource, success, fail, params) {
-		this.call('GET', resource, null, success, fail, params);
+	httpGet (resource, success, fail, params,output) {
+		this.call('GET', resource, null, success, fail, params,output);
 	};
 
-	post (resource, content, success, fail, params) {
-		this.call('POST', resource, content, success, fail, params);
+	post (resource, content, success, fail, params,output) {
+		this.call('POST', resource, content, success, fail, params,output);
 	};
 
 	hash (method, resource, timestamp, nonce, contents, params) {
@@ -22,7 +22,6 @@ export class CirtsClient {
 	};
 
 	generateId(len?) {
-		var p = this.settings;
 		var zeroString = (function (l) {
 			if (!l) {
 				return '0000000000000000';
@@ -44,8 +43,9 @@ export class CirtsClient {
 		return (Math.random().toString(36) + zeroString).slice(2, 16);
 	};
 
-	call (method, resource, contents, success, fail, params) {
+	call (method, resource, contents, success, fail, params,output) {
 		var contentString = (contents ? JSON.stringify(contents) : null);
+		var client = this;
 		var nonce = this.generateId();
 		jQuery.ajax(this.settings.host + this.settings.basePath + resource,
 			{
@@ -55,15 +55,19 @@ export class CirtsClient {
 				dataType: 'json',
 				url: this.settings.basePath + resource + params,
 				beforeSend: function (xhr) {
-					var timestampString = new Date().toGMTString();
-					xhr.setRequestHeader('Authorization', 'Basic ' + btoa(this.settings.username + ':' + this.settings.password));
-					xhr.setRequestHeader('X-Api-Key', this.settings.apiId + ':' + this.hash(method, resource, timestampString, nonce, contentString));
+					var timestampString = new Date().toUTCString();
+					xhr.setRequestHeader('Authorization', 'Basic ' + btoa(client.settings.username + ':' + client.settings.password));
+					xhr.setRequestHeader('X-Api-Key', client.settings.apiId + ':' + client.hash(method, resource, timestampString, nonce, contentString, params));
 					xhr.setRequestHeader('X-Timestamp', timestampString);
 					xhr.setRequestHeader('X-Nonce', nonce);
 				}
 			})
-			.done(success)
-			.fail(fail);
+			.done(function (r) {
+				output.successDo(r);
+			})
+			.fail(function (r) {
+				output.successDo(r);
+			});
 	};
 
 	signature (method, resource, timestamp, nonce, contents, params) {
@@ -78,9 +82,7 @@ export class CirtsClient {
 		return signature;
 	};
 
-
-
-	constructor() {
-		this.settings = new AppSettings();
+	constructor(settings?:AppSettings) {
+		this.settings = settings || (new AppSettings());
 	}
 }

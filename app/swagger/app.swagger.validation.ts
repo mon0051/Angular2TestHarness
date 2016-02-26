@@ -1,4 +1,4 @@
-export class SwaggerValidator {
+/*export class SwaggerValidator {
 	validateResponse = function (httpResponse) {
 		swagger.clearMessages();
 
@@ -36,4 +36,4 @@ export class SwaggerValidator {
 			}
 		}
 	};
-}
+}*/

@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/platform/browser', "./swagger/app.swagger"], function(exports_1) {
+System.register(['angular2/core', 'angular2/platform/browser', "./swagger/swagger"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', 'angular2/platform/browser', "./swagger/app.sw
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, browser_1, app_swagger_1;
+    var core_1, browser_1, swagger_1;
     var AppRoot;
     return {
         setters:[
@@ -18,8 +18,8 @@ System.register(['angular2/core', 'angular2/platform/browser', "./swagger/app.sw
             function (browser_1_1) {
                 browser_1 = browser_1_1;
             },
-            function (app_swagger_1_1) {
-                app_swagger_1 = app_swagger_1_1;
+            function (swagger_1_1) {
+                swagger_1 = swagger_1_1;
             }],
         execute: function() {
             AppRoot = (function () {
@@ -27,7 +27,7 @@ System.register(['angular2/core', 'angular2/platform/browser', "./swagger/app.sw
                 }
                 AppRoot = __decorate([
                     core_1.Component({
-                        directives: [app_swagger_1.SwaggerRoot],
+                        directives: [swagger_1.SwaggerRoot],
                         selector: 'app-root',
                         templateUrl: 'app/page-template.html'
                     }), 

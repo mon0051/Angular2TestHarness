@@ -24,9 +24,24 @@ System.register([], function(exports_1) {
                     this.apiId = "test_1";
                     this.apiKey = "MQpE1iRhe3jPfNQL/CIoRg==";
                 }
-                AppSettings.prototype.fullUserName = function () {
-                    return this.domain + "\\" + this.username;
-                };
+                Object.defineProperty(AppSettings.prototype, "fullUserName", {
+                    get: function () {
+                        if (this.domain) {
+                            return this.domain + "\\" + this.username;
+                        }
+                        return this.username;
+                    },
+                    set: function (value) {
+                        if (value === value.replace('\\', '')) {
+                            this.domain = "";
+                            return;
+                        }
+                        this.domain = value.replace(/\\.*/g, "");
+                        this.username = value.replace(/.*\\/g, "");
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 return AppSettings;
             })();
             exports_1("AppSettings", AppSettings);

@@ -1,3 +1,4 @@
+import {HtmlHelper}from '../common/HtmlHelper';
 import {Component} from 'angular2/core';
 import {NgFor,NgFormControl,CORE_DIRECTIVES,FORM_DIRECTIVES} from 'angular2/common';
 import {CirtsClient} from "../cirts/cirts-client";
@@ -5,44 +6,71 @@ import {AppSettings} from "../settings/settings";
 
 declare var app:any;
 
-
 @Component({
 	directives: [NgFor, NgFormControl, CORE_DIRECTIVES, FORM_DIRECTIVES],
 	selector: 'swagger',
 	templateUrl: 'app/swagger/swagger.html',
-	providers: [app.CirtsClient]
+	providers: [AppSettings]
 })
 export class SwaggerRoot {
 	settings:AppSettings;
 	cirtsClient:CirtsClient;
 	swagger:any;
+	selectedPath:string;
+	query:string;
+	uriParameters:string;
+	result:any;
+	swaggerValidation:any;
 
 	pathArray() {
 		var paths = [];
-		for (var path in this.swagger.spec.paths) {
-			if (this.swagger.spec.paths.hasOwnProperty(path)) {
+		for (var path in this.swagger.paths) {
+			if (this.swagger.paths.hasOwnProperty(path)) {
 				paths[paths.length] = path;
 			}
 		}
 		return paths;
 	}
 
-	getCirts(resource,params){
-		this.cirtsClient.httpGet(resource, function (r) {this.successDo(r)}, function (r) {this.failDo(r)},params);
+	getCirts() {
+		this.result = "Running Query...";
+
+		var end = HtmlHelper.parseEndpoint(this.selectedPath, this.uriParameters);
+		var qry = HtmlHelper.parseQuery(this.query);
+		var fullResource = HtmlHelper.build(end, qry);
+
+		this.cirtsClient.httpGet(fullResource, this.successDo, this.failDo, qry, this);
 	}
 
-	static successDo(result) {
-		alert(JSON.stringify(result));
+	expectedQuery() {
+		var qry = HtmlHelper.parseQuery(this.query);
+		var end = HtmlHelper.parseEndpoint(this.selectedPath, this.uriParameters);
+		var endpoint = HtmlHelper.build(end, qry);
+
+		return this.settings.host + this.settings.basePath + endpoint;
 	}
 
-	static failDo(result) {
-		alert((JSON.stringify(result)));
+	successDo(result) {
+		this.result = JSON.stringify(result, null, 4);
 	}
 
-	constructor(settings, cirtsClient) {
+	failDo(result) {
+		this.result = JSON.stringify(result, null, 4);
+	}
+
+	output() {
+		return "Domain: " +
+			this.settings.domain +
+			"\nUsername: " +
+			this.settings.username +
+			"\nUrl: " + this.expectedQuery() +
+			"\n" + (this.result || "");
+	}
+
+	constructor(settings:AppSettings) {
 		this.settings = settings;
-		this.cirtsClient = cirtsClient;
+		this.cirtsClient = new CirtsClient(settings);
 		this.swagger = app.swagger.spec;
-
+		this.selectedPath = "";
 	}
 }

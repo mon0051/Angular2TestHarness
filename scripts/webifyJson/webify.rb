@@ -2,8 +2,7 @@ require 'json'
 
 class WebifyJson
   def self.webify(input,namespace,object_name,output)
-    json = "export class #{object_name}\n spec: Object;\n constructor(){\n"
-    json += 'this.spec = '
+    json = "window.#{namespace}.#{object_name}="
     json_file = File.new(input,'r')
     output_file = File.new(output,'w')
 
@@ -11,7 +10,7 @@ class WebifyJson
         json += line
     end
 
-    json += ";\n}\n}"
+    json += ";"
 
     output_file.write(json)
 

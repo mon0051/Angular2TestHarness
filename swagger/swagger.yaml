@@ -30,6 +30,7 @@ paths:
 
         The following example behaviour is expected . . .
 
+
         #### Search by CirtsID, matching clients found ####
 
         | Request URL | Expected Response Code |

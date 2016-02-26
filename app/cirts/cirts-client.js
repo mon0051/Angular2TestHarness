@@ -1,25 +1,22 @@
-System.register(["../settings/settings", 'jquery'], function(exports_1) {
-    var settings_1, jQuery;
+System.register(["../settings/settings"], function(exports_1) {
+    var settings_1;
     var CirtsClient;
     return {
         setters:[
             function (settings_1_1) {
                 settings_1 = settings_1_1;
-            },
-            function (jQuery_1) {
-                jQuery = jQuery_1;
             }],
         execute: function() {
             CirtsClient = (function () {
-                function CirtsClient() {
-                    this.settings = new settings_1.AppSettings();
+                function CirtsClient(settings) {
+                    this.settings = settings || (new settings_1.AppSettings());
                 }
-                CirtsClient.prototype.httpGet = function (resource, success, fail, params) {
-                    this.call('GET', resource, null, success, fail, params);
+                CirtsClient.prototype.httpGet = function (resource, success, fail, params, output) {
+                    this.call('GET', resource, null, success, fail, params, output);
                 };
                 ;
-                CirtsClient.prototype.post = function (resource, content, success, fail, params) {
-                    this.call('POST', resource, content, success, fail, params);
+                CirtsClient.prototype.post = function (resource, content, success, fail, params, output) {
+                    this.call('POST', resource, content, success, fail, params, output);
                 };
                 ;
                 CirtsClient.prototype.hash = function (method, resource, timestamp, nonce, contents, params) {
@@ -31,7 +28,6 @@ System.register(["../settings/settings", 'jquery'], function(exports_1) {
                 };
                 ;
                 CirtsClient.prototype.generateId = function (len) {
-                    var p = this.settings;
                     var zeroString = (function (l) {
                         if (!l) {
                             return '0000000000000000';
@@ -49,8 +45,9 @@ System.register(["../settings/settings", 'jquery'], function(exports_1) {
                     return (Math.random().toString(36) + zeroString).slice(2, 16);
                 };
                 ;
-                CirtsClient.prototype.call = function (method, resource, contents, success, fail, params) {
+                CirtsClient.prototype.call = function (method, resource, contents, success, fail, params, output) {
                     var contentString = (contents ? JSON.stringify(contents) : null);
+                    var client = this;
                     var nonce = this.generateId();
                     jQuery.ajax(this.settings.host + this.settings.basePath + resource, {
                         method: method,
@@ -59,15 +56,19 @@ System.register(["../settings/settings", 'jquery'], function(exports_1) {
                         dataType: 'json',
                         url: this.settings.basePath + resource + params,
                         beforeSend: function (xhr) {
-                            var timestampString = new Date().toGMTString();
-                            xhr.setRequestHeader('Authorization', 'Basic ' + btoa(this.settings.username + ':' + this.settings.password));
-                            xhr.setRequestHeader('X-Api-Key', this.settings.apiId + ':' + this.hash(method, resource, timestampString, nonce, contentString));
+                            var timestampString = new Date().toUTCString();
+                            xhr.setRequestHeader('Authorization', 'Basic ' + btoa(client.settings.username + ':' + client.settings.password));
+                            xhr.setRequestHeader('X-Api-Key', client.settings.apiId + ':' + client.hash(method, resource, timestampString, nonce, contentString, params));
                             xhr.setRequestHeader('X-Timestamp', timestampString);
                             xhr.setRequestHeader('X-Nonce', nonce);
                         }
                     })
-                        .done(success)
-                        .fail(fail);
+                        .done(function (r) {
+                        output.successDo(r);
+                    })
+                        .fail(function (r) {
+                        output.successDo(r);
+                    });
                 };
                 ;
                 CirtsClient.prototype.signature = function (method, resource, timestamp, nonce, contents, params) {
@@ -87,4 +88,4 @@ System.register(["../settings/settings", 'jquery'], function(exports_1) {
         }
     }
 });
-//# sourceMappingURL=app.cirts-client.js.map
+//# sourceMappingURL=cirts-client.js.map

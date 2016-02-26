@@ -1,4 +1,4 @@
-(function (app,ng) {
+/*(function (app,ng) {
 	'use strict';
 	app.swagger.SwaggerSpec = ng.core.Class({
 		constructor: function (){
@@ -61,3 +61,4 @@
 
 
 }(window.app || (window.app = {}), ng));
+*/

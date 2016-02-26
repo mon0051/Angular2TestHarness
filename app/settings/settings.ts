@@ -11,6 +11,22 @@
  */
 
 export class AppSettings {
+	get fullUserName():string {
+		if(this.domain){
+			return this.domain + "\\" + this.username;
+		}
+		return this.username;
+	}
+
+	set fullUserName(value:string) {
+		if(value === value.replace('\\','')){
+			this.domain = "";
+			return;
+		}
+		this.domain = value.replace(/\\.*/g, "");
+		this.username = value.replace(/.*\\/g, "");
+	}
+
 	username:string;
 	password:string;
 	domain:string;
@@ -19,9 +35,7 @@ export class AppSettings {
 	apiId:string;
 	apiKey:string;
 
-	fullUserName() {
-		return this.domain + "\\" + this.username;
-	}
+	private _fullUserName:string;
 
 	constructor() {
 		this.username = "valid.user"; // Change To username

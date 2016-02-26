@@ -20,7 +20,9 @@
     "concurrently": "^1.0.0",
     "lite-server": "^2.0.1",
     "typescript": "^1.7.5",
-    "typings": "^0.6.8"
+    "typings": "^0.6.8",
+    "tether":"",
+    "bootstrap":"4.0.0-alpha.2"
   },
   "scripts": {
     "postinstall": "npm run typings install",
