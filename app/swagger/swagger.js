@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/common', "./app.swagger.spec"], function(exports_1) {
+System.register(['angular2/core', 'angular2/common'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,8 +8,8 @@ System.register(['angular2/core', 'angular2/common', "./app.swagger.spec"], func
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, common_1, common_2, common_3, common_4, app_swagger_spec_1;
-    var SwaggerInput;
+    var core_1, common_1;
+    var SwaggerRoot;
     return {
         setters:[
             function (core_1_1) {
@@ -17,25 +17,15 @@ System.register(['angular2/core', 'angular2/common', "./app.swagger.spec"], func
             },
             function (common_1_1) {
                 common_1 = common_1_1;
-                common_2 = common_1_1;
-                common_3 = common_1_1;
-                common_4 = common_1_1;
-            },
-            function (app_swagger_spec_1_1) {
-                app_swagger_spec_1 = app_swagger_spec_1_1;
             }],
         execute: function() {
-            SwaggerInput = (function () {
-                function SwaggerInput(settings, cirtsClient) {
+            SwaggerRoot = (function () {
+                function SwaggerRoot(settings, cirtsClient) {
                     this.settings = settings;
                     this.cirtsClient = cirtsClient;
-                    this.swagger = new app_swagger_spec_1.SwaggerSpec;
-                    this.apiSelector = { name: "" };
-                    this.getCirts = function (apiPath, params) {
-                        alert(JSON.stringify(apiPath));
-                    };
+                    this.swagger = app.swagger.spec;
                 }
-                SwaggerInput.prototype.pathArray = function () {
+                SwaggerRoot.prototype.pathArray = function () {
                     var paths = [];
                     for (var path in this.swagger.spec.paths) {
                         if (this.swagger.spec.paths.hasOwnProperty(path)) {
@@ -44,25 +34,28 @@ System.register(['angular2/core', 'angular2/common', "./app.swagger.spec"], func
                     }
                     return paths;
                 };
-                SwaggerInput.successDo = function (result) {
+                SwaggerRoot.prototype.getCirts = function (resource, params) {
+                    this.cirtsClient.httpGet(resource, function (r) { this.successDo(r); }, function (r) { this.failDo(r); }, params);
+                };
+                SwaggerRoot.successDo = function (result) {
                     alert(JSON.stringify(result));
                 };
-                SwaggerInput.failDo = function (result) {
+                SwaggerRoot.failDo = function (result) {
                     alert((JSON.stringify(result)));
                 };
-                SwaggerInput = __decorate([
+                SwaggerRoot = __decorate([
                     core_1.Component({
-                        directives: [common_1.NgFor, common_2.NgFormControl, common_3.CORE_DIRECTIVES, common_4.FORM_DIRECTIVES],
-                        selector: 'swagger-input',
-                        templateUrl: 'app/swagger/app-swagger-input.html',
-                        providers: [app.swagger.SwaggerUtilityProvider, app.AppSettings, app.CirtsClient]
+                        directives: [common_1.NgFor, common_1.NgFormControl, common_1.CORE_DIRECTIVES, common_1.FORM_DIRECTIVES],
+                        selector: 'swagger',
+                        templateUrl: 'app/swagger/swagger.html',
+                        providers: [app.CirtsClient]
                     }), 
                     __metadata('design:paramtypes', [Object, Object])
-                ], SwaggerInput);
-                return SwaggerInput;
+                ], SwaggerRoot);
+                return SwaggerRoot;
             })();
-            exports_1("SwaggerInput", SwaggerInput);
+            exports_1("SwaggerRoot", SwaggerRoot);
         }
     }
 });
-//# sourceMappingURL=app-swagger-input.js.map
+//# sourceMappingURL=app.swagger.js.map
