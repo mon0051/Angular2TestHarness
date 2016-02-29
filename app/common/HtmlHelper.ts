@@ -10,7 +10,7 @@ export class HtmlHelper {
 		if(!endpoint) return "";
 		endpoint = endpoint.slice(1);
 		if(typeof endpoint !== "string") return "";
-		return endpoint.replace(/\{.*\}/g, uriParams || "");
+		return endpoint.replace(/\{.*\}/g, uriParams || "/");
 	}
 
 	static build(endpoint:string,query?:string){

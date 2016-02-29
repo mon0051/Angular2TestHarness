@@ -3,11 +3,13 @@ import {Component} from 'angular2/core';
 import {NgFor,NgFormControl,CORE_DIRECTIVES,FORM_DIRECTIVES} from 'angular2/common';
 import {CirtsClient} from "../cirts/cirts-client";
 import {AppSettings} from "../settings/settings";
+import {ResponseHelper} from "../common/ResponseHelper";
+import {AutoTests} from "./auto-tests";
 
 declare var app:any;
 
 @Component({
-	directives: [NgFor, NgFormControl, CORE_DIRECTIVES, FORM_DIRECTIVES],
+	directives: [NgFor, NgFormControl, CORE_DIRECTIVES, FORM_DIRECTIVES, AutoTests],
 	selector: 'swagger',
 	templateUrl: 'app/swagger/swagger.html',
 	providers: [AppSettings]
@@ -39,7 +41,7 @@ export class SwaggerRoot {
 		var qry = HtmlHelper.parseQuery(this.query);
 		var fullResource = HtmlHelper.build(end, qry);
 
-		this.cirtsClient.httpGet(fullResource, this.successDo, this.failDo, qry, this);
+		this.cirtsClient.httpGet(fullResource, this.successDo, this.failDo, "", this);
 	}
 
 	expectedQuery() {
@@ -59,12 +61,17 @@ export class SwaggerRoot {
 	}
 
 	output() {
+		var r;
+		if(this.result){
+			r = ResponseHelper.PrettyfieResponse(this.result);
+		}
+
 		return "Domain: " +
 			this.settings.domain +
 			"\nUsername: " +
 			this.settings.username +
 			"\nUrl: " + this.expectedQuery() +
-			"\n" + (this.result || "");
+			"\n" + (r || "");
 	}
 
 	constructor(settings:AppSettings) {

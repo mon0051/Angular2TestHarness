@@ -19,7 +19,7 @@ System.register([], function(exports_1) {
                     endpoint = endpoint.slice(1);
                     if (typeof endpoint !== "string")
                         return "";
-                    return endpoint.replace(/\{.*\}/g, uriParams || "");
+                    return endpoint.replace(/\{.*\}/g, uriParams || "/");
                 };
                 HtmlHelper.build = function (endpoint, query) {
                     return endpoint + (query || "");

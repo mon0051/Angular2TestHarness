@@ -27,7 +27,7 @@ System.register(["../settings/settings"], function(exports_1) {
                     return sha.getHMAC('B64');
                 };
                 ;
-                CirtsClient.prototype.generateId = function (len) {
+                CirtsClient.generateId = function (len) {
                     var zeroString = (function (l) {
                         if (!l) {
                             return '0000000000000000';
@@ -48,7 +48,7 @@ System.register(["../settings/settings"], function(exports_1) {
                 CirtsClient.prototype.call = function (method, resource, contents, success, fail, params, output) {
                     var contentString = (contents ? JSON.stringify(contents) : null);
                     var client = this;
-                    var nonce = this.generateId();
+                    var nonce = CirtsClient.generateId();
                     jQuery.ajax(this.settings.host + this.settings.basePath + resource, {
                         method: method,
                         contentType: 'application/json',
@@ -64,10 +64,16 @@ System.register(["../settings/settings"], function(exports_1) {
                         }
                     })
                         .done(function (r) {
-                        output.successDo(r);
+                        success(r);
+                        if (output) {
+                            output.successDo(r);
+                        }
                     })
                         .fail(function (r) {
-                        output.successDo(r);
+                        fail(r);
+                        if (output) {
+                            output.successDo(r);
+                        }
                     });
                 };
                 ;

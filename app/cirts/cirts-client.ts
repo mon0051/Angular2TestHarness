@@ -4,15 +4,16 @@ declare var jsSHA:any;
 
 export class CirtsClient {
 	settings:AppSettings;
-	httpGet (resource, success, fail, params,output) {
-		this.call('GET', resource, null, success, fail, params,output);
+
+	httpGet(resource, success, fail, params, output) {
+		this.call('GET', resource, null, success, fail, params, output);
 	};
 
-	post (resource, content, success, fail, params,output) {
-		this.call('POST', resource, content, success, fail, params,output);
+	post(resource, content, success, fail, params, output) {
+		this.call('POST', resource, content, success, fail, params, output);
 	};
 
-	hash (method, resource, timestamp, nonce, contents, params) {
+	hash(method, resource, timestamp, nonce, contents, params) {
 		var sig = this.signature(method, resource, timestamp, nonce, contents, params);
 		var sha = new jsSHA('SHA-256', 'TEXT'); //jshint ignore:line, this is a library
 		sha.setHMACKey('MQpE1iRhe3jPfNQL/CIoRg==', 'B64');
@@ -21,7 +22,7 @@ export class CirtsClient {
 		return sha.getHMAC('B64');
 	};
 
-	generateId(len?) {
+	static generateId(len?) {
 		var zeroString = (function (l) {
 			if (!l) {
 				return '0000000000000000';
@@ -43,10 +44,10 @@ export class CirtsClient {
 		return (Math.random().toString(36) + zeroString).slice(2, 16);
 	};
 
-	call (method, resource, contents, success, fail, params,output) {
+	call(method, resource, contents, success, fail, params, output?) {
 		var contentString = (contents ? JSON.stringify(contents) : null);
 		var client = this;
-		var nonce = this.generateId();
+		var nonce = CirtsClient.generateId();
 		jQuery.ajax(this.settings.host + this.settings.basePath + resource,
 			{
 				method: method,
@@ -63,14 +64,20 @@ export class CirtsClient {
 				}
 			})
 			.done(function (r) {
-				output.successDo(r);
+				success(r);
+				if(output){
+					output.successDo(r);
+				}
 			})
 			.fail(function (r) {
-				output.successDo(r);
+				fail(r);
+				if(output){
+					output.successDo(r);
+				}
 			});
 	};
 
-	signature (method, resource, timestamp, nonce, contents, params) {
+	signature(method, resource, timestamp, nonce, contents, params) {
 		// todo: query params
 		// /Lwb.Cirts.WebService/api/Ping
 		// Mon, 15 Jun 2015 04:01:00 GMT

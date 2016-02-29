@@ -22,7 +22,8 @@
     "typescript": "^1.7.5",
     "typings": "^0.6.8",
     "tether":"",
-    "bootstrap":"4.0.0-alpha.2"
+    "bootstrap":"4.0.0-alpha.2",
+    "protractor":""
   },
   "scripts": {
     "postinstall": "npm run typings install",

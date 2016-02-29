@@ -1,61 +1,64 @@
 <div class="swagger">
+  <div class="row">
     <div class="col-md-6 well-large big-column blue">
-        <h3>Request</h3>
-        <form id="send">
-            <h4 class="help-block">Credentials</h4>
-            <p class="text-info">
-                The username and password must be valid in both CIRTS <i>and</i> the server running the WebService
-            </p>
+      <h3>Request</h3>
+      <form id="send">
+        <h4 class="help-block">Credentials</h4>
+        <p class="text-info">
+          The username and password must be valid in both CIRTS <i>and</i> the server running the WebService
+        </p>
 
-            <div class="form-group">
-                <label for="username"><h5>Username</h5></label>
-                <input type="text" class="form-control" id="username" placeholder="Username"
-                       [(ngModel)]="settings.fullUserName">
-            </div>
+        <div class="form-group">
+          <label for="username"><h5>Username</h5></label>
+          <input type="text" class="form-control" id="username" placeholder="Username"
+                 [(ngModel)]="settings.fullUserName">
+        </div>
 
-            <div class="form-group">
-                <label for="password"><h5>Password</h5></label>
-                <input type="password" class="form-control" id="password" placeholder="Password" name="password"
-                       autocomplete="off" [(ngModel)]="settings.password">
-            </div>
+        <div class="form-group">
+          <label for="password"><h5>Password</h5></label>
+          <input type="password" class="form-control" id="password" placeholder="Password" name="password"
+                 autocomplete="off" [(ngModel)]="settings.password">
+        </div>
 
-            <div class="form-group">
-                <label for="apiid"><h5>API Name</h5></label>
-                <input type="text" class="form-control" id="apiid" placeholder="API Name" [(ngModel)]="settings.apiId">
-            </div>
+        <div class="form-group">
+          <label for="apiid"><h5>API Name</h5></label>
+          <input type="text" class="form-control" id="apiid" placeholder="API Name" [(ngModel)]="settings.apiId">
+        </div>
 
-            <div class="form-group">
-                <label for="apikey"><h5>API Key</h5></label>
-                <input type="password" class="form-control" id="apikey" placeholder="API Key"
-                       [(ngModel)]="settings.apiKey">
-            </div>
+        <div class="form-group">
+          <label for="apikey"><h5>API Key</h5></label>
+          <input type="password" class="form-control" id="apikey" placeholder="API Key"
+                 [(ngModel)]="settings.apiKey">
+        </div>
 
-            <div class="form-group">
-                <h4 class="help-block">Request</h4>
-                <h5>Endpoint</h5>
-                <div id="swagger-generated-input">
-                    <select [(ngModel)]="selectedPath">
-                        <option *ngFor="#path of pathArray()" value="{{path}}">{{path}}</option>
-                    </select>
-                </div>
-                <label for="resource"><h5>Query</h5></label>
-                <input type="text" class="form-control" id="resource" placeholder="Resource" [(ngModel)]="query">
-                <label for="parameters"><h5>Uri Parameters</h5></label>
-                <input type="text" class="form-control" id="parameters" placeholder="Parameters" [(ngModel)]="uriParameters">
-            </div>
-            <button (click)="getCirts()" type="submit"
-                    class="btn btn-large btn-primary pull-right">Submit
-            </button>
-        </form>
+        <div class="form-group">
+          <h4 class="help-block">Request</h4>
+          <h5>Endpoint</h5>
+          <div id="swagger-generated-input">
+            <select [(ngModel)]="selectedPath">
+              <option *ngFor="#path of pathArray()" value="{{path}}">{{path}}</option>
+            </select>
+          </div>
+          <label for="resource"><h5>Query</h5></label>
+          <input type="text" class="form-control" id="resource" placeholder="Resource" [(ngModel)]="query">
+          <label for="parameters"><h5>Uri Parameters</h5></label>
+          <input type="text" class="form-control" id="parameters" placeholder="Parameters" [(ngModel)]="uriParameters">
+        </div>
+        <button (click)="getCirts()" type="submit"
+                class="btn btn-large btn-primary pull-right">Submit
+        </button>
+      </form>
     </div>
     <div class="swagger-output">
-        <div class="col-md-6">
-            <h3>Response</h3>
-            <p class="text-info">If you do not get a proper error code here, check the developer tools
-                                 console</p>
-            <code id="result" style="height:450px;overflow:scroll">{{output()}}</code>
-            <h3>Swagger Validation</h3>
-            <code id="swagger-output" style="height:450px;overflow:scroll;"></code>
-        </div>
+      <div class="col-md-6">
+        <h3>Response</h3>
+        <p class="text-info">If you do not get a proper error code here, check the developer tools
+                             console</p>
+        <code id="result" style="height:450px;overflow:scroll">{{output()}}</code>
+        <h3>Swagger Validation</h3>
+        <code id="swagger-output" style="height:450px;overflow:scroll;"></code>
+      </div>
     </div>
+  </div>
+  <auto-test-output></auto-test-output>
 </div>

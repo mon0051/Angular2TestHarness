@@ -16,49 +16,49 @@ paths:
         2. FamilyName (At least 3 characters, will match on partial)
         3. CirtsId (Will match exact only, so provide full id if using)
 
-        Only one LWBLocation can be searched at once, defaulting to Australia. **If you do not provide an LwbLocation only results from Australia will be returned.**
+        Only one LWBLocation can be searched at once (per query), defaulting to Australia. **If you do not provide an LwbLocation only results from Australia will be returned.**
 
         #### Example Usage ####
 
-        Given that the database contains the following **client** data
+        Given that the database contains the following **client** data.
 
-        | cirtsID | firstName | familyName | dateOfBirth | lwbRegion |
-        | --- | --- | ---|
-        | 00001 | Jane | Doe | 19800101 | Parramatta |
-        | 00002 | John | Doe | 19820202 | Bankstown |
-        | 00003 | Joe | Bloggs | 19991231 | Surry Hills |
+        **Note.** _This does not represent actual database structure, it represents
+        what an appropriate database query would return if looking for this information._
+
+        | cirtsID | firstName | familyName | dateOfBirth | lwbRegion | gender |
+        |:---:|:---:|:---:|:---:|:---:|:---:|
+        | 00001 | Jane | Doe | 19800101 | Parramatta |Female|
+        | 00002 | John | Doe | 19820202 | Bankstown |Male|
+        | 00003 | Joe | Bloggs | 19991231 | Surry Hills |Unknown|
 
         The following example behaviour is expected . . .
 
-
-        #### Search by CirtsID, matching clients found ####
+        #### Search by FamilyName, matching clients found ####
 
         | Request URL | Expected Response Code |
-        | ------ |
+        |:---:|:---:|
         | /clients?familyName=Doe | 200 OK |
 
         ```javascript
         {
-          client: [
-            { cirtsID: "00001", firstName: "Jane", familyName: "Doe",  dateOfBirth: "1980-01-01T00:00:00.000Z", lwbRegion: "Parramatta" },
-            { cirtsID: "00002", firstName: "John", familyName: "Doe", dateOfBirth: "1982-02-02T00:00:00.000Z", lwbRegion: "Bankstown" }
+          "clients": [
+            { "cirtsID": "00001", "firstName": "Jane", "familyName": "Doe",  "dateOfBirth": "1980-01-01T00:00:00.000Z", "lwbRegion": "Parramatta" },
+            { "cirtsID": "00002", "firstName": "John", "familyName": "Doe", "dateOfBirth": "1982-02-02T00:00:00.000Z", "lwbRegion": "Bankstown" }
           ]
         }
         ```
 
-        #### Search by CirtsID, matching clients NOT found ####
+        #### Search by FamilyName, matching clients NOT found ####
 
         | Request URL | Expected Response Code |
-        | ------ |
-        | /clients?familyName=Smith | 200 OK |
+        |:------|:---:|
+        | /clients?familyName=Jenkins | 200 OK |
 
         ```javascript
         {
-          client: [
-          ]
+          "clients": []
         }
         ```
-
       parameters:
         -
           name: cirtsId
@@ -224,30 +224,29 @@ paths:
                 format: CLXXXXXX,
                 description: |
                   The CirtsId of the client in question. Will be in the format CLXXXX
-              givenNames:
+              clientName:
                 type: string
-                format: text
+                format: GivenNames FamilyName (Alias)
                 description: |
-                  Also known as given name/s. May be more than one, but will be returned as single string.
-              familyName:
-                type: string
-                format: text
-                description: |
-                  May not exist. Equivilent to Surname, Second Name.
-              alias:
-                type: string
-                format: text
-                description: |
-                  If client is known primarily by a nickname, an alias may be provided
+                  The full name of the client, specified as GivenNames FamilyName (Alias)
               dateOfBirth:
                 type: string
                 format: YYYYMMDD
                 description: |
                   Age can be calculated using this value. May be an estimate.
+              dobEstimated:
+                type: boolean
+                description: |
+                  True if the date of birth was estimated rather than taken from records
               primaryLanguage:
                 type: string
                 description: |
                   The primary language spoken by the client
+              gender: |
+                The gender of the client. Valid values are Male, Female, Unknown, None and Other.
+                A value of None means that a gender was never entered into the system, or the information on the clients gender could not be found.
+                A value of Unknown means a value was entered into the system, but was specified as Unknown (Possibly automatically).
+                A value of Other means the gender was specified, but was not fit either Male or Female.
               indigenousStatus:
                 type: string
                 description: |

@@ -6109,9 +6109,10 @@ a.badge:focus {
  border-radius: 0;
 }
 
-code#result,code#swagger-output{
+code#result,code#swagger-output,code.auto-test-output{
   white-space: pre;
   display: block;
   border-radius: 0;
+  color:black;
 }
 
