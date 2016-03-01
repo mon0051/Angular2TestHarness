@@ -1,72 +1,53 @@
-System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings"], function(exports_1) {
-    var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = (this && this.__metadata) || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1, cirts_client_1, settings_1;
+System.register([], function(exports_1) {
     var AutoTests;
     return {
-        setters:[
-            function (core_1_1) {
-                core_1 = core_1_1;
-            },
-            function (cirts_client_1_1) {
-                cirts_client_1 = cirts_client_1_1;
-            },
-            function (settings_1_1) {
-                settings_1 = settings_1_1;
-            }],
+        setters:[],
         execute: function() {
             AutoTests = (function () {
-                function AutoTests(settings) {
-                    this.cirtsClient = new cirts_client_1.CirtsClient();
-                    this.settings = settings;
-                    this.testOutput = {
-                        value: "Running....."
-                    };
-                    this.runClientListTests();
+                function AutoTests() {
                 }
-                AutoTests.prototype.bad = function (testName) {
-                    var output = this.testOutput;
-                    return function (r) {
-                        if (output.value === "Running.....") {
-                            output.value = " ";
-                        }
-                        output.value += testName + " test failed\n";
-                    };
+                AutoTests.prototype.clientSearchWillFailWithNoQuery = function (client, testRunner) {
+                    var testName = "Client Search Will Fail With No Query";
+                    var success = testRunner.bad(testName);
+                    var fail = testRunner.good(testName);
+                    client.httpGet('clients', success, fail, null, null);
                 };
-                AutoTests.prototype.good = function (testName) {
-                    var output = this.testOutput;
-                    return function (r) {
-                        if (output.value === "Running.....") {
-                            output.value = " ";
-                        }
-                        output.value += testName + " test succeeded\n";
-                    };
+                AutoTests.prototype.clientSearchWillSucceedWithFamilyName = function (client, testRunner) {
+                    var testName = "Client Search Ok With FamilyName More than 3 chars";
+                    var succeed = testRunner.good(testName);
+                    var fail = testRunner.bad(testName);
+                    client.httpGet('clients?familyName=rubber', succeed, fail, null, null);
                 };
-                AutoTests.prototype.runClientListTests = function () {
-                    var client = this.cirtsClient;
-                    var settings = this.settings;
-                    this.clientSearchWillFailWithNoQuery(client, settings);
+                AutoTests.prototype.clientSearchWillSucceedWithGivenNames = function (client, testRunner) {
+                    var testName = "Client Search Ok With Given Names More than 3 chars";
+                    var succeed = testRunner.good(testName);
+                    var fail = testRunner.bad(testName);
+                    client.httpGet('clients?givenNames=yarble', succeed, fail, null, null);
                 };
-                AutoTests.prototype.clientSearchWillFailWithNoQuery = function (client, settings) {
-                    var output = this;
-                    var params = null;
-                    client.httpGet('clients', this.bad("clientSearchWillFailWithNoQuery"), this.good("clientSearchWillFailWithNoQuery"), params, null);
+                AutoTests.prototype.clientSearchWillSucceedWithValidCirtsIdSyntax = function (client, testRunner) {
+                    var testName = "Client Search Will Succeed With Valid CirtsId Syntax";
+                    var succeed = testRunner.good(testName);
+                    var fail = testRunner.bad(testName);
+                    client.httpGet('clients?cirtsId=CL1000', succeed, fail, null, null);
                 };
-                AutoTests = __decorate([
-                    core_1.Component({
-                        providers: [settings_1.AppSettings],
-                        templateUrl: 'app/swagger/auto-tests.html',
-                        selector: 'auto-test-output'
-                    }), 
-                    __metadata('design:paramtypes', [settings_1.AppSettings])
-                ], AutoTests);
+                AutoTests.prototype.clientSearchWillSucceedWithValidCirtsIdSyntaxLowerCase = function (client, testRunner) {
+                    var testName = "Client Search Will Succeed With Valid CirtsId Syntax Lower Case";
+                    var succeed = testRunner.good(testName);
+                    var fail = testRunner.bad(testName);
+                    client.httpGet('clients?cirtsId=cl1000', succeed, fail, null, null);
+                };
+                AutoTests.prototype.clientSearchWillFailWithInvalidCirtsIdSyntax = function (client, testRunner) {
+                    var testName = "Client Search Will Fail With Invalid CirtsId Syntax(No CL prefix)";
+                    var succeed = testRunner.good(testName);
+                    var fail = testRunner.bad(testName);
+                    client.httpGet('clients?cirtsId=1000', fail, succeed, null, null);
+                };
+                AutoTests.prototype.clientSearchWillFailWithInvalidFamilyNameSyntax = function (client, testRunner) {
+                    var testName = "Client Search Will Fail With Invalid FamilyName Syntax";
+                    var succeed = testRunner.good(testName);
+                    var fail = testRunner.bad(testName);
+                    client.httpGet('clients?familyName=b', fail, succeed, null, null);
+                };
                 return AutoTests;
             })();
             exports_1("AutoTests", AutoTests);

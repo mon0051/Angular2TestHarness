@@ -1,58 +1,60 @@
-import {Component} from 'angular2/core';
 import {CirtsClient} from '../cirts/cirts-client';
-import {AppSettings} from "../settings/settings";
+import {AutoTestRunner} from "./auto-test-runner";
 
-
-@Component({
-	providers: [AppSettings],
-	templateUrl: 'app/swagger/auto-tests.html',
-	selector: 'auto-test-output'
-})
 export class AutoTests {
-	cirtsClient:CirtsClient;
-	settings:AppSettings;
-	testOutput:{value:string};
+	clientSearchWillFailWithNoQuery(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Search Will Fail With No Query";
+		var success = testRunner.bad(testName);
+		var fail = testRunner.good(testName);
 
-	bad(testName:string) {
-		var output = this.testOutput;
-		return function (r) {
-			if (output.value === "Running.....") {
-				output.value = " ";
-			}
-			output.value += testName + " test failed\n";
-		}
+		client.httpGet('clients', success, fail, null, null);
 	}
 
-	good(testName:string) {
-		var output = this.testOutput;
-		return function (r) {
-			if (output.value === "Running.....") {
-				output.value = " ";
-			}
-			output.value += testName + " test succeeded\n";
-		}
+	clientSearchWillSucceedWithFamilyName(client:CirtsClient,testRunner:AutoTestRunner) {
+		var testName = "Client Search Ok With FamilyName More than 3 chars";
+		var succeed = testRunner.good(testName);
+		var fail = testRunner.bad(testName);
+
+		client.httpGet('clients?familyName=rubber', succeed, fail, null, null);
 	}
 
-	runClientListTests() {
-		var client = this.cirtsClient;
-		var settings = this.settings;
+	clientSearchWillSucceedWithGivenNames(client:CirtsClient, testRunner:AutoTestRunner){
+		var testName = "Client Search Ok With Given Names More than 3 chars";
+		var succeed = testRunner.good(testName);
+		var fail = testRunner.bad(testName);
 
-		this.clientSearchWillFailWithNoQuery(client, settings);
+		client.httpGet('clients?givenNames=yarble',succeed,fail,null,null);
 	}
 
-	clientSearchWillFailWithNoQuery(client:CirtsClient, settings:AppSettings) {
-		var output = this;
-		var params = null;
+	clientSearchWillSucceedWithValidCirtsIdSyntax(client:CirtsClient, testRunner:AutoTestRunner){
+		var testName = "Client Search Will Succeed With Valid CirtsId Syntax";
+		var succeed = testRunner.good(testName);
+		var fail = testRunner.bad(testName);
 
-		client.httpGet('clients', this.bad("clientSearchWillFailWithNoQuery"), this.good("clientSearchWillFailWithNoQuery"), params, null);
+		client.httpGet('clients?cirtsId=CL1000',succeed,fail,null,null);
 	}
 
-	constructor(settings:AppSettings) {
-		this.cirtsClient = new CirtsClient();
-		this.settings = settings;
-		this.testOutput = {
-			value: "Running....."
-		};
-		this.runClientListTests();
+	clientSearchWillSucceedWithValidCirtsIdSyntaxLowerCase(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Search Will Succeed With Valid CirtsId Syntax Lower Case";
+		var succeed = testRunner.good(testName);
+		var fail = testRunner.bad(testName);
+
+		client.httpGet('clients?cirtsId=cl1000', succeed, fail, null, null);
+	}
+
+	clientSearchWillFailWithInvalidCirtsIdSyntax(client:CirtsClient, testRunner:AutoTestRunner){
+		var testName = "Client Search Will Fail With Invalid CirtsId Syntax(No CL prefix)";
+		var succeed = testRunner.good(testName);
+		var fail = testRunner.bad(testName);
+
+		client.httpGet('clients?cirtsId=1000', fail, succeed, null, null);
+	}
+
+	clientSearchWillFailWithInvalidFamilyNameSyntax(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Search Will Fail With Invalid FamilyName Syntax";
+		var succeed = testRunner.good(testName);
+		var fail = testRunner.bad(testName);
+
+		client.httpGet('clients?familyName=b', fail, succeed, null, null);
 	}
 }

@@ -4,12 +4,12 @@ import {NgFor,NgFormControl,CORE_DIRECTIVES,FORM_DIRECTIVES} from 'angular2/comm
 import {CirtsClient} from "../cirts/cirts-client";
 import {AppSettings} from "../settings/settings";
 import {ResponseHelper} from "../common/ResponseHelper";
-import {AutoTests} from "./auto-tests";
+import {AutoTestRunner} from "./auto-test-runner";
 
 declare var app:any;
 
 @Component({
-	directives: [NgFor, NgFormControl, CORE_DIRECTIVES, FORM_DIRECTIVES, AutoTests],
+	directives: [NgFor, NgFormControl, CORE_DIRECTIVES, FORM_DIRECTIVES, AutoTestRunner],
 	selector: 'swagger',
 	templateUrl: 'app/swagger/swagger.html',
 	providers: [AppSettings]

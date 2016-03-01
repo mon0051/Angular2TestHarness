@@ -1,4 +1,4 @@
-System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "../cirts/cirts-client", "../settings/settings", "../common/ResponseHelper", "./auto-tests"], function(exports_1) {
+System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "../cirts/cirts-client", "../settings/settings", "../common/ResponseHelper", "./auto-test-runner"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "..
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var HtmlHelper_1, core_1, common_1, cirts_client_1, settings_1, ResponseHelper_1, auto_tests_1;
+    var HtmlHelper_1, core_1, common_1, cirts_client_1, settings_1, ResponseHelper_1, auto_test_runner_1;
     var SwaggerRoot;
     return {
         setters:[
@@ -30,8 +30,8 @@ System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "..
             function (ResponseHelper_1_1) {
                 ResponseHelper_1 = ResponseHelper_1_1;
             },
-            function (auto_tests_1_1) {
-                auto_tests_1 = auto_tests_1_1;
+            function (auto_test_runner_1_1) {
+                auto_test_runner_1 = auto_test_runner_1_1;
             }],
         execute: function() {
             SwaggerRoot = (function () {
@@ -83,7 +83,7 @@ System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "..
                 };
                 SwaggerRoot = __decorate([
                     core_1.Component({
-                        directives: [common_1.NgFor, common_1.NgFormControl, common_1.CORE_DIRECTIVES, common_1.FORM_DIRECTIVES, auto_tests_1.AutoTests],
+                        directives: [common_1.NgFor, common_1.NgFormControl, common_1.CORE_DIRECTIVES, common_1.FORM_DIRECTIVES, auto_test_runner_1.AutoTestRunner],
                         selector: 'swagger',
                         templateUrl: 'app/swagger/swagger.html',
                         providers: [settings_1.AppSettings]
