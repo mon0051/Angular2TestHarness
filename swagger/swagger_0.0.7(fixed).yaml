@@ -23,7 +23,7 @@ paths:
         Given that the database contains the following **client** data.
 
         **Note.** _This does not represent actual database structure, it represents
-        what an appropriate database query would return if looking for this information._
+        what an appropriate database query would return if looking for this information.
 
         | cirtsID | firstName | familyName | dateOfBirth | lwbRegion        | gender | lwbLocation |state|sector               |active|
         |:-------:|:---------:|:----------:|:-----------:|:----------------:|:------:|:-----------:|:---:|:-------------------:|:----:|
@@ -403,11 +403,10 @@ paths:
                 type: string
                 description: |
                   The primary language spoken by the client
-              gender: |
-                The gender of the client. Valid values are Male, Female, Unknown, None and Other.
-                A value of None means that a gender was never entered into the system, or the information on the clients gender could not be found.
-                A value of Unknown means a value was entered into the system, but was specified as Unknown (Possibly automatically).
-                A value of Other means the gender was specified, but was not fit either Male or Female.
+              gender:
+                type: string
+                description: |
+                  The gender of the client. Valid values are Male, Female, Unknown, None and Other. A value of None means that a gender was never entered into the system, or the information on the clients gender could not be found. A value of Unknown means a value was entered into the system, but was specified as Unknown (Possibly automatically). A value of Other means the gender was specified, but was not fit either Male or Female.
               indigenousStatus:
                 type: string
                 description: |
@@ -540,9 +539,7 @@ paths:
 definitions:
   ServerError:
     description: |
-      Default Server Error Message, returned when it does not meet the requirements for other
-      messages. Will probably contain an exception, and as such, should not be provided to unauthenticated
-      users. The default message for an unauthenticated request is 404 Not Found ( Good Security Practice )
+      Default Server Error Message, returned when it does not meet the requirements for other messages. Will probably contain an exception, and as such, should not be provided to unauthenticated users. The default message for an unauthenticated request is 404 Not Found ( Good Security Practice )
     type: object
     properties:
       message:
@@ -576,15 +573,13 @@ definitions:
       message:
         type: string
         default: |
-          You do not have access to the resource you have requested. Ensure you are using the correct username
-          and password, or contact the helpdesk if you believe you should have access to this resource.
+          You do not have access to the resource you have requested. Ensure you are using the correct username and password, or contact the helpdesk if you believe you should have access to this resource.
       code:
         type: integer
         default: 403
   BadRequest:
     description: |
-      The request was not in the format expected. Either a required parameter was missing, an
-      unexpected parameter was provided, of a paramter/s was not the correct value.
+      The request was not in the format expected. Either a required parameter was missing, an unexpected parameter was provided, of a paramter/s was not the correct value.
     type: object
     properties:
       message:
