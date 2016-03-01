@@ -26,7 +26,9 @@ System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings
                 function AutoTests(settings) {
                     this.cirtsClient = new cirts_client_1.CirtsClient();
                     this.settings = settings;
-                    this.testOutput = { value: "Running....." };
+                    this.testOutput = {
+                        value: "Running....."
+                    };
                     this.runClientListTests();
                 }
                 AutoTests.prototype.bad = function (testName) {
@@ -44,7 +46,7 @@ System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings
                         if (output.value === "Running.....") {
                             output.value = " ";
                         }
-                        output.value += testName + " test succeded\n";
+                        output.value += testName + " test succeeded\n";
                     };
                 };
                 AutoTests.prototype.runClientListTests = function () {

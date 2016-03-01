@@ -16,20 +16,20 @@ export class AutoTests {
 	bad(testName:string) {
 		var output = this.testOutput;
 		return function (r) {
-			if(output.value === "Running....."){
+			if (output.value === "Running.....") {
 				output.value = " ";
 			}
-			output.value += testName+" test failed\n";
+			output.value += testName + " test failed\n";
 		}
 	}
 
 	good(testName:string) {
 		var output = this.testOutput;
-		return function(r) {
+		return function (r) {
 			if (output.value === "Running.....") {
 				output.value = " ";
 			}
-			output.value += testName+ " test succeded\n";
+			output.value += testName + " test succeeded\n";
 		}
 	}
 
@@ -50,7 +50,9 @@ export class AutoTests {
 	constructor(settings:AppSettings) {
 		this.cirtsClient = new CirtsClient();
 		this.settings = settings;
-		this.testOutput = {value:"Running....."};
+		this.testOutput = {
+			value: "Running....."
+		};
 		this.runClientListTests();
 	}
 }
