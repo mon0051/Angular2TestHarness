@@ -17,7 +17,6 @@ export class AppSettings {
 		}
 		return this.username;
 	}
-
 	set fullUserName(value:string) {
 		if(value === value.replace('\\','')){
 			this.domain = "";

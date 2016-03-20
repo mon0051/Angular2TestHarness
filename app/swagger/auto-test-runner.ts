@@ -2,8 +2,10 @@ import {Component} from 'angular2/core';
 import {CirtsClient} from '../cirts/cirts-client';
 import {AppSettings} from "../settings/settings";
 import {AutoTests} from "./auto-tests";
+import {DisplayThinkingHint} from "../common/user-display-hints";
 
 @Component({
+	directives:[DisplayThinkingHint],
 	providers: [AppSettings],
 	templateUrl: 'app/swagger/auto-tests.html',
 	selector: 'auto-test-output'
@@ -11,49 +13,66 @@ import {AutoTests} from "./auto-tests";
 export class AutoTestRunner {
 	cirtsClient:CirtsClient;
 	settings:AppSettings;
-	testOutput:{value:string};
+	passedTests: Array<string>;
+	failedTests:Array<string>;
+	runningTests:number;
+
 
 	bad(testName) {
-		var output = this.testOutput;
+		var output = this.failedTests;
+		var runner = this;
 		return function (r) {
-			if (output.value === "Running.....") {
-				output.value = testName + " test failed\n";
-				return;
-			}
-			output.value += testName + " test failed\n";
+			output[output.length] = testName + " test failed\n";
+			runner.runningTests--;
 		}
 	}
 
 	good(testName) {
-		var output = this.testOutput;
+		var output = this.passedTests;
+		var runner = this;
 		return function (r) {
-			if (output.value === "Running.....") {
-				output.value = testName + " test succeeded\n";
-				return;
-			}
-			output.value += testName + " test succeeded\n";
+			output[output.length] = testName + " test succeeded\n";
+			runner.runningTests--;
 		}
 	}
 
 	runClientListTests() {
 		var client = this.cirtsClient;
-		var settings = this.settings;
 		var tests = new AutoTests();
+		var running = this.runningTests;
 
 		for (var test in tests) {
-
-			tests[test](client, this);
-
+			try{
+				this.runningTests++;
+				tests[test](client, this);
+			}catch(e){
+				this.bad(test);
+			}
 		}
 	}
 
-
 	constructor(settings:AppSettings) {
-		this.cirtsClient = new CirtsClient();
+		this.cirtsClient = new CirtsClient(settings);
 		this.settings = settings;
-		this.testOutput = {
-			value: "Running....."
-		};
+		this.passedTests = [];
+		this.failedTests = [];
+		this.runningTests= 0 ;
 		this.runClientListTests();
+	}
+}
+
+export class AutoTestHelpers {
+	static GetWillFail(query:string, testName:string, testRunner:AutoTestRunner, client:CirtsClient) {
+		var succeed = testRunner.good(testName);
+		var fail = testRunner.bad(testName);
+
+		client.httpGet(query, fail, succeed, null, null);
+	}
+
+	static GetWillSucceed(query:string, testName:string, testRunner:AutoTestRunner, client:CirtsClient) {
+		var succeed = testRunner.good(testName);
+		var fail = testRunner.bad(testName);
+
+		client.httpGet(query, succeed, fail, null, null);
 	}
 }

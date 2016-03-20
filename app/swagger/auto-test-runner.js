@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings", "./auto-tests"], function(exports_1) {
+System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings", "./auto-tests", "../common/user-display-hints"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,8 +8,8 @@ System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, cirts_client_1, settings_1, auto_tests_1;
-    var AutoTestRunner;
+    var core_1, cirts_client_1, settings_1, auto_tests_1, user_display_hints_1;
+    var AutoTestRunner, AutoTestHelpers;
     return {
         setters:[
             function (core_1_1) {
@@ -23,47 +23,53 @@ System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings
             },
             function (auto_tests_1_1) {
                 auto_tests_1 = auto_tests_1_1;
+            },
+            function (user_display_hints_1_1) {
+                user_display_hints_1 = user_display_hints_1_1;
             }],
         execute: function() {
             AutoTestRunner = (function () {
                 function AutoTestRunner(settings) {
-                    this.cirtsClient = new cirts_client_1.CirtsClient();
+                    this.cirtsClient = new cirts_client_1.CirtsClient(settings);
                     this.settings = settings;
-                    this.testOutput = {
-                        value: "Running....."
-                    };
+                    this.passedTests = [];
+                    this.failedTests = [];
+                    this.runningTests = 0;
                     this.runClientListTests();
                 }
                 AutoTestRunner.prototype.bad = function (testName) {
-                    var output = this.testOutput;
+                    var output = this.failedTests;
+                    var runner = this;
                     return function (r) {
-                        if (output.value === "Running.....") {
-                            output.value = testName + " test failed\n";
-                            return;
-                        }
-                        output.value += testName + " test failed\n";
+                        output[output.length] = testName + " test failed\n";
+                        runner.runningTests--;
                     };
                 };
                 AutoTestRunner.prototype.good = function (testName) {
-                    var output = this.testOutput;
+                    var output = this.passedTests;
+                    var runner = this;
                     return function (r) {
-                        if (output.value === "Running.....") {
-                            output.value = testName + " test succeeded\n";
-                            return;
-                        }
-                        output.value += testName + " test succeeded\n";
+                        output[output.length] = testName + " test succeeded\n";
+                        runner.runningTests--;
                     };
                 };
                 AutoTestRunner.prototype.runClientListTests = function () {
                     var client = this.cirtsClient;
-                    var settings = this.settings;
                     var tests = new auto_tests_1.AutoTests();
+                    var running = this.runningTests;
                     for (var test in tests) {
-                        tests[test](client, this);
+                        try {
+                            this.runningTests++;
+                            tests[test](client, this);
+                        }
+                        catch (e) {
+                            this.bad(test);
+                        }
                     }
                 };
                 AutoTestRunner = __decorate([
                     core_1.Component({
+                        directives: [user_display_hints_1.DisplayThinkingHint],
                         providers: [settings_1.AppSettings],
                         templateUrl: 'app/swagger/auto-tests.html',
                         selector: 'auto-test-output'
@@ -73,6 +79,22 @@ System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings
                 return AutoTestRunner;
             })();
             exports_1("AutoTestRunner", AutoTestRunner);
+            AutoTestHelpers = (function () {
+                function AutoTestHelpers() {
+                }
+                AutoTestHelpers.GetWillFail = function (query, testName, testRunner, client) {
+                    var succeed = testRunner.good(testName);
+                    var fail = testRunner.bad(testName);
+                    client.httpGet(query, fail, succeed, null, null);
+                };
+                AutoTestHelpers.GetWillSucceed = function (query, testName, testRunner, client) {
+                    var succeed = testRunner.good(testName);
+                    var fail = testRunner.bad(testName);
+                    client.httpGet(query, succeed, fail, null, null);
+                };
+                return AutoTestHelpers;
+            })();
+            exports_1("AutoTestHelpers", AutoTestHelpers);
         }
     }
 });

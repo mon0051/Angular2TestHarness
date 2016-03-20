@@ -10,7 +10,7 @@ A query must have at least one of the following parameters provided to be a vali
 
 Only one LWBLocation can be searched at once (per query), defaulting to Australia. **If you do not provide an LwbLocation only results from Australia will be returned.**
 
-# Examples #
+# Example Data #
 
 Given that the database contains the following **client** data.
 
@@ -28,33 +28,6 @@ what an appropriate database query would return if looking for this information.
 | 00007   | Opla      |            | 19200101    | Katherine        |None    | Australia   |VIC  |Homelessness         |true  |
 
 The following example behaviour is expected . . .
-
-#### Search by FamilyName, matching clients found ####
-
-| Request URL | Expected Response Code |
-|:-----------:|:----------------------:|
-| /clients?familyName=Doe | 200 OK     |
-
-```javascript
-{
-  "clients": [
-    { "cirtsID": "00001", "firstName": "Jane", "familyName": "Doe",  "dateOfBirth": "1980-01-01T00:00:00.000Z", "lwbRegion": "Parramatta" },
-    { "cirtsID": "00002", "firstName": "John", "familyName": "Doe", "dateOfBirth": "1982-02-02T00:00:00.000Z", "lwbRegion": "Bankstown" }
-  ]
-}
-```
-
-#### Search by FamilyName, matching clients NOT found ####
-
-| Request URL | Expected Response Code |
-|:-----------:|:----------------------:|
-| /clients?familyName=Jenkins | 200 OK |
-
-```javascript
-{
-  "clients": []
-}
-```
 
 ## Basic Parameter Examples ##
 
@@ -210,5 +183,34 @@ was not specified._
   "clients": [
     { "cirtsID": "00002", "firstName": "John", "familyName": "Doe",  "dateOfBirth": "1982-02-02T00:00:00.000Z", "lwbRegion": "Bankstown" },
     { "cirtsID": "00004", "firstName": "Leroy", "familyName": "Jenkins",  "dateOfBirth": "1950-01-01T00:00:00.000Z", "lwbRegion": "Lordaron" }]
+}
+```
+
+## Multiple Parameter Examples ##
+
+When multiple parameters are provided, only clients that match all the parameters will be returned
+
+| Request URL | Expected Response Code |
+|:-----------:|:----------------------:|
+|/clients?dateOfBirthLow=19800101&dateOfBirthHigh=19810101|200 OK|
+**Note** _Even though Joe Bloggs meets the date criteria, he is not in the default LwbLocation (Australia) and his LwbLocation(New Zealand)
+was not specified._
+```json
+{
+  "clients": [
+    { "cirtsID": "00001", "firstName": "Jane", "familyName": "Doe",  "dateOfBirth": "1980-01-01T00:00:00.000Z", "lwbRegion": "Parramatta" },
+    { "cirtsID": "00005", "firstName": "Jenny", "familyName": "Gergich",  "dateOfBirth": "1980-01-01T00:00:00.000Z", "lwbRegion": "Darblock" }]
+}
+```
+
+| Request URL | Expected Response Code |
+|:-----------:|:----------------------:|
+|/clients?dateOfBirthLow=19800101&dateOfBirthHigh=19810101&firstName=jane|200 OK|
+**Note** _Even though Joe Bloggs meets the date criteria, he is not in the default LwbLocation (Australia) and his LwbLocation(New Zealand)
+was not specified._
+```json
+{
+  "clients": [
+    { "cirtsID": "00001", "firstName": "Jane", "familyName": "Doe",  "dateOfBirth": "1980-01-01T00:00:00.000Z", "lwbRegion": "Parramatta" }]
 }
 ```

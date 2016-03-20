@@ -1,60 +1,82 @@
 import {CirtsClient} from '../cirts/cirts-client';
-import {AutoTestRunner} from "./auto-test-runner";
+import {AutoTestRunner,AutoTestHelpers} from "./auto-test-runner";
 
 export class AutoTests {
+
 	clientSearchWillFailWithNoQuery(client:CirtsClient, testRunner:AutoTestRunner) {
 		var testName = "Client Search Will Fail With No Query";
-		var success = testRunner.bad(testName);
-		var fail = testRunner.good(testName);
+		var query = 'clients';
 
-		client.httpGet('clients', success, fail, null, null);
+		AutoTestHelpers.GetWillFail(query,testName,testRunner,client);
 	}
 
-	clientSearchWillSucceedWithFamilyName(client:CirtsClient,testRunner:AutoTestRunner) {
-		var testName = "Client Search Ok With FamilyName More than 3 chars";
-		var succeed = testRunner.good(testName);
-		var fail = testRunner.bad(testName);
+	clientSearchWillSucceedWithFamilyName(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Search Returns Ok With FamilyName More than 2 chars";
+		var query = 'clients?familyName=rubber';
 
-		client.httpGet('clients?familyName=rubber', succeed, fail, null, null);
+		AutoTestHelpers.GetWillSucceed(query,testName,testRunner,client);
 	}
 
-	clientSearchWillSucceedWithGivenNames(client:CirtsClient, testRunner:AutoTestRunner){
-		var testName = "Client Search Ok With Given Names More than 3 chars";
-		var succeed = testRunner.good(testName);
-		var fail = testRunner.bad(testName);
+	clientSearchWillSucceedWithGivenNames(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Search Returns Ok With Given Names More than 2 chars";
+		var query = 'clients?givenNames=ya';
 
-		client.httpGet('clients?givenNames=yarble',succeed,fail,null,null);
+		AutoTestHelpers.GetWillSucceed(query, testName, testRunner, client);
 	}
 
-	clientSearchWillSucceedWithValidCirtsIdSyntax(client:CirtsClient, testRunner:AutoTestRunner){
-		var testName = "Client Search Will Succeed With Valid CirtsId Syntax";
-		var succeed = testRunner.good(testName);
-		var fail = testRunner.bad(testName);
+	clientSearchWillSucceedWithValidCirtsIdSyntax(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Search Returns Ok With Valid CirtsId Syntax";
+		var query = 'clients?cirtsId=CL1000';
 
-		client.httpGet('clients?cirtsId=CL1000',succeed,fail,null,null);
+		AutoTestHelpers.GetWillSucceed(query, testName, testRunner, client);
 	}
 
 	clientSearchWillSucceedWithValidCirtsIdSyntaxLowerCase(client:CirtsClient, testRunner:AutoTestRunner) {
-		var testName = "Client Search Will Succeed With Valid CirtsId Syntax Lower Case";
-		var succeed = testRunner.good(testName);
-		var fail = testRunner.bad(testName);
+		var testName = "Client Search Returns Ok With Valid CirtsId Syntax Lower Case";
+		var query = 'clients?cirtsId=cl1000';
 
-		client.httpGet('clients?cirtsId=cl1000', succeed, fail, null, null);
+		AutoTestHelpers.GetWillSucceed(query, testName, testRunner, client);
 	}
 
-	clientSearchWillFailWithInvalidCirtsIdSyntax(client:CirtsClient, testRunner:AutoTestRunner){
+	clientSearchWillFailWithInvalidCirtsIdSyntax(client:CirtsClient, testRunner:AutoTestRunner) {
 		var testName = "Client Search Will Fail With Invalid CirtsId Syntax(No CL prefix)";
-		var succeed = testRunner.good(testName);
-		var fail = testRunner.bad(testName);
+		var query = 'clients?cirtsId=1000';
 
-		client.httpGet('clients?cirtsId=1000', fail, succeed, null, null);
+		AutoTestHelpers.GetWillFail(query, testName, testRunner, client);
 	}
 
 	clientSearchWillFailWithInvalidFamilyNameSyntax(client:CirtsClient, testRunner:AutoTestRunner) {
 		var testName = "Client Search Will Fail With Invalid FamilyName Syntax";
-		var succeed = testRunner.good(testName);
-		var fail = testRunner.bad(testName);
+		var query = 'clients?familyName=b';
 
-		client.httpGet('clients?familyName=b', fail, succeed, null, null);
+		AutoTestHelpers.GetWillFail(query, testName, testRunner, client);
+	}
+
+	clientSearchWillFailWithInvalidGivenNameSyntax(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Search Will Fail With Invalid GivenNames Syntax";
+		var query = 'clients?givenNames=b';
+
+		AutoTestHelpers.GetWillFail(query, testName, testRunner, client);
+	}
+
+	clientDetailWillFailWithNoCLPrefixOnCirtsId(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Detail Will Fail With No CL Prefix On CirtsId";
+		var query = 'clients/2020';
+
+		AutoTestHelpers.GetWillFail(query, testName, testRunner, client);
+	}
+
+	clientDetailWillFailWithNonExistentCirtsId(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Detail Will Fail With Non Existent CirtsId";
+		var query = 'clients/CL9999999';
+
+		AutoTestHelpers.GetWillFail(query, testName, testRunner, client);
+	}
+
+	clientDetailWillFailWithInvalidCirtsIdSyntax(client:CirtsClient, testRunner:AutoTestRunner) {
+		var testName = "Client Detail Will Fail With Invalid CirtsId Syntax";
+		var query = 'clients/CLplop';
+
+		AutoTestHelpers.GetWillFail(query, testName, testRunner, client);
 	}
 }

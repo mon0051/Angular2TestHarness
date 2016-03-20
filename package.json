@@ -23,7 +23,8 @@
     "typings": "^0.6.8",
     "tether":"",
     "bootstrap":"4.0.0-alpha.2",
-    "protractor":""
+    "protractor":"",
+    "swagger-cli": ""
   },
   "scripts": {
     "postinstall": "npm run typings install",

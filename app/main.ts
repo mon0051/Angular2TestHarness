@@ -8,7 +8,6 @@ import {SwaggerRoot} from "./swagger/swagger";
 	templateUrl: 'app/page-template.html'
 })
 export class AppRoot {
-
 	constructor() {
 	}
 }
