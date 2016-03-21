@@ -351,6 +351,15 @@ paths:
                   type: string
                   description: |
                     The region from which LWB provides services to the client
+                page:
+                  type: number
+                  description: current page
+                pageSize:
+                  type: number
+                  description: current page size
+                totalResults:
+                  type: number
+                  description: total number of search results. Used to calculate page position.
         400:
           description: 'Malformed Request Provided'
           schema:
@@ -607,6 +616,15 @@ paths:
                   type: string
                   description: |
                     Name of client sector
+                page:
+                  type: number
+                  description: current page
+                pageSize:
+                  type: number
+                  description: current page size
+                totalResults:
+                  type: number
+                  description: total number of search results. Used to calculate page position.s
         400:
           description: 'Malformed Request Provided'
           schema:
@@ -623,7 +641,7 @@ paths:
           description: 'Server Error'
           schema:
             $ref: '#/definitions/ServerError'
-  /clients/{cirtsId}/keyWorker:
+  /clients/{cirtsId}/workers:
     get:
       parameters:
       -
@@ -653,6 +671,15 @@ paths:
               keyWorkerId:
                 type: string
                 format: WXXXXX
+              page:
+                type: number
+                description: current page
+              pageSize:
+                type: number
+                description: current page size
+              totalResults:
+                type: number
+                description: total number of search results. Used to calculate page position.
         400:
           description: 'Malformed Request Provided'
           schema:
@@ -717,6 +744,161 @@ paths:
                   type: string
                   description: |
                     Important information about relation to client, eg Primary Care Giver, Emergency Contact
+                page:
+                  type: number
+                  description: current page
+                pageSize:
+                  type: number
+                  description: current page size
+                totalResults:
+                  type: number
+                  description: total number of search results. Used to calculate page position.
+          400:
+            description: 'Malformed Request Provided'
+            schema:
+              $ref: '#/definitions/BadRequest'
+          403:
+            description: 'Forbidden'
+            schema:
+              $ref: '#/definitions/ForbiddenError'
+          404:
+            description: 'Not Found'
+            schema:
+              $ref: '#/definitions/NotFoundError'
+          500:
+            description: 'Server Error'
+            schema:
+              $ref: '#/definitions/ServerError'
+  /clients/{cirtsId}/familyNetwork:
+      get:
+        parameters:
+        -
+          name: cirtsId
+          in: path
+          description: |
+            Client CirtsId. Must be provided with alphabetic prefix. eg. CL1000 is valid 1000 is not valid.
+          type: string
+          required: true
+          format: CLXXXX
+        responses:
+          200:
+            description: |
+              The clients social/family network members
+            schema:
+              title: KeyWorker
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: |
+                    Full name of the network connection (a network connection is a person associated with the client).
+                category:
+                  type: string
+                  decription: |
+                    The type of connection. eg. Parent, sibling etc
+                connection:
+                  type: string
+                  description: |
+                    A finer grain version of category, this will be Father, Mother, Brother, Sister etc.
+                status:
+                  type: string
+                  description: |
+                    Active/Inactive flag.
+                contactType:
+                  type: string
+                  description: |
+                    How this contact is made with this network connection. eg Phone, email, face to face etc. Set to unrestricted by default.
+                phoneNumber:
+                  type: string
+                  decription: |
+                    The phone number may have been entered in various formats, eg (00) 0000 0000, 0000000000, 000000000, +61000000000.
+                    Will be returned as entered.
+                keyConnectionInformation:
+                  type: string
+                  description: |
+                    Important information about relation to client, eg Primary Care Giver, Emergency Contact
+                page:
+                  type: number
+                  description: current page
+                pageSize:
+                  type: number
+                  description: current page size
+                totalResults:
+                  type: number
+                  description: total number of search results. Used to calculate page position.
+          400:
+            description: 'Malformed Request Provided'
+            schema:
+              $ref: '#/definitions/BadRequest'
+          403:
+            description: 'Forbidden'
+            schema:
+              $ref: '#/definitions/ForbiddenError'
+          404:
+            description: 'Not Found'
+            schema:
+              $ref: '#/definitions/NotFoundError'
+          500:
+            description: 'Server Error'
+            schema:
+              $ref: '#/definitions/ServerError'
+  /clients/{cirtsId}/dibpFamily:
+      get:
+        parameters:
+        -
+          name: cirtsId
+          in: path
+          description: |
+            Client CirtsId. Must be provided with alphabetic prefix. eg. CL1000 is valid 1000 is not valid.
+          type: string
+          required: true
+          format: CLXXXX
+        responses:
+          200:
+            description: |
+              The clients social/family network members
+            schema:
+              title: KeyWorker
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: |
+                    Full name of the network connection (a network connection is a person associated with the client).
+                category:
+                  type: string
+                  decription: |
+                    The type of connection. eg. Parent, sibling etc
+                connection:
+                  type: string
+                  description: |
+                    A finer grain version of category, this will be Father, Mother, Brother, Sister etc.
+                status:
+                  type: string
+                  description: |
+                    Active/Inactive flag.
+                contactType:
+                  type: string
+                  description: |
+                    How this contact is made with this network connection. eg Phone, email, face to face etc. Set to unrestricted by default.
+                phoneNumber:
+                  type: string
+                  decription: |
+                    The phone number may have been entered in various formats, eg (00) 0000 0000, 0000000000, 000000000, +61000000000.
+                    Will be returned as entered.
+                keyConnectionInformation:
+                  type: string
+                  description: |
+                    Important information about relation to client, eg Primary Care Giver, Emergency Contact
+                page:
+                  type: number
+                  description: current page
+                pageSize:
+                  type: number
+                  description: current page size
+                totalResults:
+                  type: number
+                  description: total number of search results. Used to calculate page position.
           400:
             description: 'Malformed Request Provided'
             schema:
@@ -791,6 +973,15 @@ paths:
                   type: string
                   description: |
                     The status of client / carer. Valid values are active and inactive.
+                page:
+                  type: number
+                  description: current page
+                pageSize:
+                  type: number
+                  description: current page size
+                totalResults:
+                  type: number
+                  description: total number of search results. Used to calculate page position.
 definitions:
   ServerError:
     description: |
