@@ -28,7 +28,7 @@ export class CirtsClient {
 				return '0000000000000000';
 			}
 			if (typeof l !== "number") {
-				throw "Bad Input for CirtsClint.generateId(len)";
+				throw "Bad Input for CirtsClient.generateId(len)";
 			}
 
 			var result = "";

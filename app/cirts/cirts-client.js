@@ -1,4 +1,6 @@
-System.register(["../settings/settings"], function(exports_1) {
+System.register(["../settings/settings"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var settings_1;
     var CirtsClient;
     return {
@@ -33,7 +35,7 @@ System.register(["../settings/settings"], function(exports_1) {
                             return '0000000000000000';
                         }
                         if (typeof l !== "number") {
-                            throw "Bad Input for CirtsClint.generateId(len)";
+                            throw "Bad Input for CirtsClient.generateId(len)";
                         }
                         var result = "";
                         while (l > 0) {
@@ -89,7 +91,7 @@ System.register(["../settings/settings"], function(exports_1) {
                 };
                 ;
                 return CirtsClient;
-            })();
+            }());
             exports_1("CirtsClient", CirtsClient);
         }
     }

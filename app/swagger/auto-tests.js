@@ -1,4 +1,6 @@
-System.register(["./auto-test-runner"], function(exports_1) {
+System.register(["./auto-test-runner"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var auto_test_runner_1;
     var AutoTests;
     return {
@@ -66,7 +68,7 @@ System.register(["./auto-test-runner"], function(exports_1) {
                     auto_test_runner_1.AutoTestHelpers.GetWillFail(query, testName, testRunner, client);
                 };
                 return AutoTests;
-            })();
+            }());
             exports_1("AutoTests", AutoTests);
         }
     }

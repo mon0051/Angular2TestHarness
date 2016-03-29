@@ -1,4 +1,6 @@
-System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings", "./auto-tests", "../common/user-display-hints"], function(exports_1) {
+System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings", "./auto-tests", "../common/user-display-hints"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -77,7 +79,7 @@ System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings
                     __metadata('design:paramtypes', [settings_1.AppSettings])
                 ], AutoTestRunner);
                 return AutoTestRunner;
-            })();
+            }());
             exports_1("AutoTestRunner", AutoTestRunner);
             AutoTestHelpers = (function () {
                 function AutoTestHelpers() {
@@ -93,7 +95,7 @@ System.register(['angular2/core', '../cirts/cirts-client', "../settings/settings
                     client.httpGet(query, succeed, fail, null, null);
                 };
                 return AutoTestHelpers;
-            })();
+            }());
             exports_1("AutoTestHelpers", AutoTestHelpers);
         }
     }

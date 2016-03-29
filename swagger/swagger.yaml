@@ -1037,3 +1037,17 @@ parameters:
     required: false
     type: number
     format: integer
+security:
+  apiKeyParam: []
+  username: []
+securityDefinitions:
+  apiKeyParam:
+    type: apiKey
+    name: apiKey
+    in: header
+  apiId:
+    type: apiKey
+    name: apiId
+    in: header
+  username:
+    type: basic
