@@ -1,8 +1,8 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  version: "0.1.2"
+  version: "0.1.3"
   title: LWB CIRTS API
-basePath:  /api
+basePath:  /Lwb.Cirts.WebService/api
 paths:
   /ping:
     get:
@@ -241,93 +241,27 @@ paths:
         ```
       parameters:
         -
-          name: cirtsId
-          in: query
-          description: |
-            The CirtsId of the client you are searching for. You can expect to only get one result if this is
-            specified correctly. Format is CLXXXXX
-          required: false
-          type: string
-          format: CLXXXXX
+          $ref: '#/parameters/cirtsIdParam'
         -
-          name: givenNames
-          in: query
-          description: |
-            The given name/s of the client/s you are searching for. Seperate names by a space. If the client is only or primarily know by a nickname, they may have an alias saved in their personal details. This parameter will also return results where it matchs the clients alias.
-          required: false
-          type: string
-          format: text
+          $ref: '#/parameters/givenNamesParam'
         -
-          name: familyName
-          in: query
-          description: |
-            The family name of the client. Not all clients have a provided family name, these records have a family name with an empty string or whitespace as value, which is not the same as a null value.
-          required: false
-          type: string
-          format: text
+          $ref: '#/parameters/familyNameParam'
         -
-          name: lwbLocation
-          in: query
-          description: |
-            The LWB location the client is associated with. This is normally a Country. Do not specify abbreviated names eg. USA as they are not stored in the database and will yeild no responses.
-          required: false
-          type: string
-          format: text
+          $ref: '#/parameters/lwbLocationParam'
         -
-          name: lwbRegion
-          in: query
-          description: |
-            Associated LWB Region that is associated with the client. Regions are (Usually) contained inside a State. Provide full name of region eg. "Far North Coast"
-          required: false
-          type: string
-          format: text
+          $ref: '#/parameters/lwbRegionParam'
         -
-          name: state
-          in: query
-          description: |
-            Associate State or Teritory associated with the client. Provide in abbreviated form eg. NSW, VIC etc. Full names of states are not saved in the databas and will not return results if used.
-          required: false
-          type: string
-          format: text
+          $ref: '#/parameters/stateParam'
         -
-          name: sector
-          in: query
-          description: |
-            Sector of the LWB organisation Associated with this client. eg. "Mental Health", "Disability"
-          required: false
-          type: string
-          format: text
+          $ref: '#/parameters/sectorParam'
         -
-          name: active
-          in: query
-          description: |
-            Flag that specifies if the client/s returned are in current caseload
-          required: false
-          type: boolean
+          $ref: '#/parameters/activeParam'
         -
-          name: dateOfBirthLow
-          in: query
-          description: |
-            Lowest dateOfBirth to be returned in search results.
-          required: false
-          type: string
-          format: YYYYMMDD
+          $ref: '#/parameters/dateOfBirthLowParam'
         -
-          name: dateOfBirthHigh
-          in: query
-          description: |
-            Maximum dateOfBirth to be returned in search results.
-          required: false
-          type: string
-          format: YYYYMMDD
+          $ref: '#/parameters/dateOfBirthHighParam'
         -
-          name: gender
-          in: query
-          description: |
-            'Client gender. Valid inputs are Male, Female, Unknown, None, Other'. None is the default and will return results from any gender.
-          required: false
-          type: string
-          format: text
+          $ref: "#/parameters/genderParam"
         -
           $ref: '#/parameters/pageParam'
         -
@@ -678,6 +612,8 @@ paths:
           $ref: '#/responses/serverError'
   /clients/{cirtsId}/network:
       get:
+        description: |
+          Not finished, will currently return all client network connections, in future will allow querying to narrow results
         parameters:
         -
           name: cirtsId
@@ -747,12 +683,13 @@ paths:
         parameters:
         -
           name: cirtsId
-          in: path
-          description: |
-            Client CirtsId. Must be provided with alphabetic prefix. eg. CL1000 is valid 1000 is not valid.
-          type: string
+          in:
+            path
+          type:
+            $ref: "#/parameters/cirtsIdParam/type"
           required: true
-          format: CLXXXX
+          description:
+            $ref: "#/parameters/cirtsIdParam/description"
         -
           $ref: '#/parameters/pageParam'
         -
@@ -942,6 +879,84 @@ paths:
                   $ref: '#/definitions/pageSize'
                 totalResults:
                   $ref: '#/definitions/totalResults'
+  /person:
+    get:
+      parameters:
+      -
+        $ref: '#/parameters/cirtsIdParam'
+      -
+        $ref: '#/parameters/givenNamesParam'
+      -
+        $ref: '#/parameters/familyNameParam'
+      -
+        $ref: '#/parameters/lwbLocationParam'
+      -
+        $ref: '#/parameters/lwbRegionParam'
+      -
+        $ref: '#/parameters/stateParam'
+      -
+        $ref: '#/parameters/sectorParam'
+      -
+        $ref: '#/parameters/activeParam'
+      -
+        $ref: '#/parameters/dateOfBirthLowParam'
+      -
+        $ref: '#/parameters/dateOfBirthHighParam'
+      -
+        $ref: "#/parameters/genderParam"
+      -
+        $ref: '#/parameters/pageParam'
+      -
+        $ref: '#/parameters/pageSizeParam'
+      responses:
+        200:
+          description: |
+            successful responses
+          schema:
+            title: people
+            type: array
+            items:
+              title: People
+              type: object
+              properties:
+                givenNames:
+                  type: string
+                  description: |
+                    The Clients given name
+                familyName:
+                  type: string
+                  description: |
+                    Clients family name. Equivilent to surname, second name
+                cirtsId:
+                  type: string
+                  format: CLXXXXX
+                  description: |
+                    The CirtsId of the client
+                dateOfBirth:
+                  type: string
+                  format: YYYYMMDD
+                  description: |
+                    Will always be returned in this format. Manipulation client side is trivial to display in other formats.
+                lwbRegion:
+                  type: string
+                  description: |
+                    The region from which LWB provides services to the client
+                personType:
+                  type: string
+                page:
+                  $ref: '#/definitions/page'
+                pageSize:
+                  $ref: '#/definitions/pageSize'
+                totalResults:
+                  $ref: '#/definitions/totalResults'
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbiddenError'
+        404:
+          $ref: '#/responses/notFoundError'
+        500:
+          $ref: '#/responses/serverError'
 responses:
   serverError:
     description: |
@@ -1011,17 +1026,104 @@ definitions:
   page:
     description: |
       Current Page. Use in conjuction with page size to page through results
-    type: number
-    format: integer
+    type: integer
   pageSize:
     description: |
       Number of results per page
-    type: number
-    format: integer
+    type: integer
   totalResults:
     description: |
       Total number of results found for query.
+    type: integer
 parameters:
+  cirtsIdParam:
+    name: cirtsId
+    in: query
+    description: |
+      The CirtsId of the client you are searching for. You can expect to only get one result if this is
+      specified correctly. Format is CLXXXXX
+    required: false
+    type: string
+    format: CLXXXXX
+  givenNamesParam:
+    name: givenNames
+    in: query
+    description: |
+      The given name/s of the client/s you are searching for. Seperate names by a space. If the client is only or primarily know by a nickname, they may have an alias saved in their personal details. This parameter will also return results where it matchs the clients alias.
+    required: false
+    type: string
+    format: text
+  familyNameParam:
+    name: familyName
+    in: query
+    description: |
+      The family name of the client. Not all clients have a provided family name, these records have a family name with an empty string or whitespace as value, which is not the same as a null value.
+    required: false
+    type: string
+    format: text
+  lwbLocationParam:
+    name: lwbLocation
+    in: query
+    description: |
+      The LWB location the client is associated with. This is normally a Country. Do not specify abbreviated names eg. USA as they are not stored in the database and will yeild no responses.
+    required: false
+    type: string
+    format: text
+  lwbRegionParam:
+    name: lwbRegion
+    in: query
+    description: |
+      Associated LWB Region that is associated with the client. Regions are (Usually) contained inside a State. Provide full name of region eg. "Far North Coast"
+    required: false
+    type: string
+    format: text
+  stateParam:
+    name: state
+    in: query
+    description: |
+      Associate State or Teritory associated with the client. Provide in abbreviated form eg. NSW, VIC etc. Full names of states are not saved in the databas and will not return results if used.
+    required: false
+    type: string
+    format: text
+  sectorParam:
+    name: sector
+    in: query
+    description: |
+      Sector of the LWB organisation Associated with this client. eg. "Mental Health", "Disability"
+    required: false
+    type: string
+    format: text
+  activeParam:
+    name: active
+    in: query
+    description: |
+      Flag that specifies if the client/s returned are in current caseload
+    required: false
+    type: boolean
+  dateOfBirthLowParam:
+    name: dateOfBirthLow
+    in: query
+    description: |
+      Lowest dateOfBirth to be returned in search results.
+    required: false
+    type: string
+    format: YYYYMMDD
+  dateOfBirthHighParam:
+    name: dateOfBirthHigh
+    in: query
+    description: |
+      Maximum dateOfBirth to be returned in search results.
+    required: false
+    type: string
+    format: YYYYMMDD
+  genderParam:
+    name: gender
+    in: query
+    description: |
+      'Client gender. Valid inputs are Male, Female, Unknown, None, Other'. None is the default and will return results from any gender.
+    required: false
+    type: string
+    format: text
   pageParam:
     name: page
     description: |
@@ -1038,16 +1140,30 @@ parameters:
     type: number
     format: integer
 security:
-  apiKeyParam: []
-  username: []
+  -
+    apiKey: []
+  -
+    Authorization: []
+  -
+    timestamp: []
+  -
+    nonce: []
 securityDefinitions:
-  apiKeyParam:
+  apiKey:
     type: apiKey
-    name: apiKey
+    name: X-Api-Key
     in: header
-  apiId:
+    description: |
+      Must be supplied in the format
+
+          apiId:encryptedApiKey
+  timestamp:
     type: apiKey
-    name: apiId
+    name: X-Timestamp
     in: header
-  username:
+  nonce:
+    type: apiKey
+    name: X-Nonce
+    in: header
+  Authorization:
     type: basic
