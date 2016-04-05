@@ -1,13 +1,18 @@
 <html>
 <head>
+  <base href="/">
   <title>Angular2 TestHarness</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="node_modules/tether/dist/css/tether.min.css">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"
+        type="text/css"
+        href="node_modules/tether/dist/css/tether.min.css">
   <!-- 1. Load libraries -->
   <!-- IE required polyfill -->
 
-  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="app/overrides.css">
+  <link rel="stylesheet"
+        type="text/css"
+        href="app/css/app.css">
 
 </head>
 
@@ -16,19 +21,24 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <a class="brand">
-          <img src="app/img/logo.png" style="width:42px;height:42px;">
-          CIRTS WebApi Test Harness
+          <img src="app/img/logo.png"
+               style="width:42px;height:42px;">CIRTS WebApi Test Harness
         </a>
       </div>
     </div>
   </div>
-  <app-root></app-root>
+  <div class="page-template">
+    <div class="container-fluid middle">
+      <app-root></app-root>
+    </div>
+  </div>
   <div class="container-fluid middle">
     <div class="row">
       <div class="row-fluid">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <div class="row" style="height: 72px;"></div>
+          <div class="row"
+               style="height: 72px;"></div>
           <div class="row">
             <div class="col-md-12"><h2>Test Interface</h2></div>
           </div>
@@ -52,6 +62,8 @@
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/router.dev.js"></script>
+
     <script>
       System.config({
         packages: {

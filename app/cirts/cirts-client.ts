@@ -1,4 +1,5 @@
 import {AppSettings} from "../settings/settings";
+import {SwaggerRoot} from "../swagger/swagger";
 declare var jQuery:any;
 declare var jsSHA:any;
 
@@ -13,8 +14,8 @@ export class CirtsClient {
 		this.call('POST', resource, content, success, fail, params, output);
 	};
 
-	hash(method, resource, timestamp, nonce, contents, params) {
-		var sig = this.signature(method, resource, timestamp, nonce, contents, params);
+	hash(method, resource, timestamp, nonce ,output) {
+		var sig = this.signature(method, resource, timestamp, nonce);
 		var sha = new jsSHA('SHA-256', 'TEXT'); //jshint ignore:line, this is a library
 		sha.setHMACKey('MQpE1iRhe3jPfNQL/CIoRg==', 'B64');
 		sha.update(sig);
@@ -44,10 +45,12 @@ export class CirtsClient {
 		return (Math.random().toString(36) + zeroString).slice(2, 16);
 	};
 
-	call(method, resource, contents, success, fail, params, output?) {
+	call(method, resource, contents, success, fail, params, output?:SwaggerRoot) {
 		var contentString = (contents ? JSON.stringify(contents) : null);
 		var client = this;
 		var nonce = CirtsClient.generateId();
+		var timestampString = new Date().toUTCString();
+		var hash = client.hash(method, resource, timestampString, nonce, output);
 		jQuery.ajax(this.settings.host + this.settings.basePath + resource,
 			{
 				method: method,
@@ -56,35 +59,36 @@ export class CirtsClient {
 				dataType: 'json',
 				url: this.settings.basePath + resource + params,
 				beforeSend: function (xhr) {
-					var timestampString = new Date().toUTCString();
+
 					xhr.setRequestHeader('Authorization', 'Basic ' + btoa(client.settings.username + ':' + client.settings.password));
-					xhr.setRequestHeader('X-Api-Key', client.settings.apiId + ':' + client.hash(method, resource, timestampString, nonce, contentString, params));
+					xhr.setRequestHeader('X-Api-Key', client.settings.apiId + ':' + hash);
 					xhr.setRequestHeader('X-Timestamp', timestampString);
 					xhr.setRequestHeader('X-Nonce', nonce);
+					
 				}
 			})
 			.done(function (r) {
 				success(r);
 				if(output){
-					output.successDo(r);
+					output.successDo()(r);
 				}
 			})
 			.fail(function (r) {
 				fail(r);
 				if(output){
-					output.successDo(r);
+					output.successDo()(r);
 				}
 			});
 	};
 
-	signature(method, resource, timestamp, nonce, contents, params) {
+	signature(method, resource, timestamp, nonce/*, contents/*, params*/) {
 		// todo: query params
 		// /Lwb.Cirts.WebService/api/Ping
 		// Mon, 15 Jun 2015 04:01:00 GMT
 		var signature = method + '\n' + this.settings.basePath + resource + '\n' + timestamp + '\n' + nonce + '\n';
-		if (contents) {
+		/*if (contents) {
 			signature = signature + contents + '\n';
-		}
+		}*/
 
 		return signature;
 	};

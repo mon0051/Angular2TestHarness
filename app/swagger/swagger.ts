@@ -4,7 +4,7 @@ import {NgFor,NgFormControl,CORE_DIRECTIVES,FORM_DIRECTIVES} from 'angular2/comm
 import {CirtsClient} from "../cirts/cirts-client";
 import {AppSettings} from "../settings/settings";
 import {ResponseHelper} from "../common/ResponseHelper";
-import {AutoTestRunner} from "./auto-test-runner";
+import {AutoTestRunner} from "./../test/auto-test-runner";
 
 declare var app:any;
 
@@ -15,14 +15,16 @@ declare var app:any;
 	providers: [AppSettings]
 })
 export class SwaggerRoot {
+	me:SwaggerRoot = this;
 	settings:AppSettings;
 	cirtsClient:CirtsClient;
 	swagger:any;
 	selectedPath:string;
 	query:string;
 	uriParameters:string;
-	result:any;
+	result:any ;
 	swaggerValidation:any;
+	sentHash:string;
 
 	pathArray() {
 		var paths = [];
@@ -41,7 +43,7 @@ export class SwaggerRoot {
 		var qry = HtmlHelper.parseQuery(this.query);
 		var fullResource = HtmlHelper.build(end, qry);
 
-		this.cirtsClient.httpGet(fullResource, this.successDo, this.failDo, "", this);
+		this.cirtsClient.httpGet(fullResource, this.successDo(), this.failDo(), "", this);
 	}
 
 	expectedQuery() {
@@ -52,12 +54,20 @@ export class SwaggerRoot {
 		return this.settings.host + this.settings.basePath + endpoint;
 	}
 
-	successDo(result) {
-		this.result = JSON.stringify(result, null, 4);
+	successDo() {
+		var self = this;
+
+		return function (httpResult) {
+			self.result = JSON.stringify(httpResult, null, 4);
+		}
 	}
 
-	failDo(result) {
-		this.result = JSON.stringify(result, null, 4);
+	failDo() {
+		var self = this;
+		return function (httpResult) {
+			self.result = JSON.stringify(httpResult, null, 4);
+		}
+
 	}
 
 	output() {
@@ -72,6 +82,10 @@ export class SwaggerRoot {
 			this.settings.username +
 			"\nUrl: " + this.expectedQuery() +
 			"\n" + (r || "");
+	}
+
+	updateSentHash(s:string){
+		this.sentHash = s;
 	}
 
 	constructor(settings:AppSettings) {

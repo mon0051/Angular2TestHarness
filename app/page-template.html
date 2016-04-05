@@ -1,13 +1,13 @@
-<div class="page-template">
-    <div class="container-fluid middle">
-        <div class="row">
-            <div class="row-fluid">
-                <div class="col-md-1"></div>
-                <div class="col-md-10">
-                    <div class="row" style="height: 72px;"></div>
-                    <swagger></swagger>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="row">
+  <div class="row-fluid">
+    <div class="col-md-10 col-md-offset-1">
+    <div class="header-spacer"></div>
+    <nav>
+      <a [routerLink]="['SwaggerRoot']">SwaggerRoot</a>
+      <a [routerLink]="['AutoTests']">AutoTests</a>
+    </nav>
+    <router-outlet></router-outlet>
+  </div>
+  </div>
 </div>
+

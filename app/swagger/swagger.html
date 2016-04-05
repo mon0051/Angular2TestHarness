@@ -1,63 +1,113 @@
-<div class="swagger">
-  <div class="row">
-    <div class="col-md-6 well-large big-column blue">
-      <h3>Request</h3>
-      <form id="send">
-        <h4 class="help-block">Credentials</h4>
-        <p class="text-info">
-          The username and password must be valid in both CIRTS <i>and</i> the server running the WebService
-        </p>
+<div>
+  <div class="swagger">
+    <div class="row">
+      <div class="col-md-6 well-large big-column blue">
 
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" class="form-control" id="username" placeholder="Username"
-                 [(ngModel)]="settings.fullUserName">
-        </div>
+        <h3>Request</h3>
 
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="Password" name="password"
-                 autocomplete="off" [(ngModel)]="settings.password">
-        </div>
+        <form id="send">
+          <h4 class="help-block">Credentials</h4>
 
-        <div class="form-group">
-          <label for="apiid">API Name</label>
-          <input type="text" class="form-control" id="apiid" placeholder="API Name" [(ngModel)]="settings.apiId">
-        </div>
+          <p class="text-info">
+            The username and password must be valid in both CIRTS <i>and</i> the server running the WebService
+          </p>
 
-        <div class="form-group">
-          <label for="apikey">API Key</label>
-          <input type="password" class="form-control" id="apikey" placeholder="API Key"
-                 [(ngModel)]="settings.apiKey">
-        </div>
+          <div class="form-group">
 
-        <div class="form-group">
-          <h4 class="help-block">Request</h4>
-          <h5>Endpoint</h5>
-          <div id="swagger-generated-input">
-            <label for="pathSelector">Path Selector</label>
-            <select [(ngModel)]="selectedPath" id="pathSelector">
-              <option *ngFor="#path of pathArray()" value="{{path}}">{{path}}</option>
-            </select>
+            <label for="username">Username</label>
+
+            <input type="text"
+                   class="form-control"
+                   id="username"
+                   placeholder="Username"
+                   [(ngModel)]="settings.fullUserName">
           </div>
-          <label for="resource">Query</label>
-          <input type="text" class="form-control" id="resource" placeholder="Resource" [(ngModel)]="query">
-          <label for="parameters">Uri Parameters</label>
-          <input type="text" class="form-control" id="parameters" placeholder="Parameters" [(ngModel)]="uriParameters">
-        </div>
-        <button (click)="getCirts()" type="submit"
-                class="btn btn-large btn-primary pull-right">Submit
-        </button>
-      </form>
-    </div>
-    <div class="swagger-output">
-      <div class="col-md-6">
+
+          <div class="form-group">
+
+            <label for="password">Password</label>
+
+            <input type="password"
+                   class="form-control"
+                   id="password"
+                   placeholder="Password"
+                   name="password"
+                   autocomplete="off"
+                   [(ngModel)]="settings.password">
+          </div>
+
+          <div class="form-group">
+            <label for="apiid">API Name</label>
+            <input type="text"
+                   class="form-control"
+                   id="apiid"
+                   placeholder="API Name"
+                   [(ngModel)]="settings.apiId">
+          </div>
+
+          <div class="form-group">
+            <label for="apikey">API Key</label>
+            <input type="password"
+                   class="form-control"
+                   id="apikey"
+                   placeholder="API Key"
+                   [(ngModel)]="settings.apiKey">
+          </div>
+
+          <div class="form-group">
+
+            <h4 class="help-block">Request</h4>
+
+            <h5>Endpoint</h5>
+
+            <div id="swagger-generated-input">
+
+              <label for="pathSelector">Path Selector</label>
+
+              <select [(ngModel)]="selectedPath"
+                      id="pathSelector">
+
+                <option *ngFor="#path of pathArray()"
+                        value="{{path}}">{{path}}
+                </option>
+
+              </select>
+
+            </div>
+
+            <label for="resource">Query</label>
+
+            <input type="text"
+                   class="form-control"
+                   id="resource"
+                   placeholder="Resource"
+                   [(ngModel)]="query">
+
+            <label for="parameters">Uri Parameters</label>
+
+            <input type="text"
+                   class="form-control"
+                   id="parameters"
+                   placeholder="Parameters"
+                   [(ngModel)]="uriParameters">
+          </div>
+
+          <button (click)="getCirts()"
+                  type="submit"
+                  class="btn btn-large btn-primary pull-right">Submit
+          </button>
+
+        </form>
+
+      </div>
+
+      <div class="swagger-output col-md-6">
         <h3>Response</h3>
-        <p class="text-info">If you do not get a proper error code here, check the developer tools
-                             console</p>
+
+        <p class="text-info">If you do not get a proper error code here, check the developer tools console</p>
+
         <code id="result" style="height:450px;overflow:scroll">{{output()}}</code>
-        <h3>Automated Tests</h3>
-        <auto-test-output></auto-test-output>
+
       </div>
     </div>
   </div>

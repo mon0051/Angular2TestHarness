@@ -1,4 +1,4 @@
-System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "../cirts/cirts-client", "../settings/settings", "../common/ResponseHelper", "./auto-test-runner"], function(exports_1, context_1) {
+System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "../cirts/cirts-client", "../settings/settings", "../common/ResponseHelper", "./../test/auto-test-runner"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -38,6 +38,7 @@ System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "..
         execute: function() {
             SwaggerRoot = (function () {
                 function SwaggerRoot(settings) {
+                    this.me = this;
                     this.settings = settings;
                     this.cirtsClient = new cirts_client_1.CirtsClient(settings);
                     this.swagger = app.swagger.spec;
@@ -57,7 +58,7 @@ System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "..
                     var end = HtmlHelper_1.HtmlHelper.parseEndpoint(this.selectedPath, this.uriParameters);
                     var qry = HtmlHelper_1.HtmlHelper.parseQuery(this.query);
                     var fullResource = HtmlHelper_1.HtmlHelper.build(end, qry);
-                    this.cirtsClient.httpGet(fullResource, this.successDo, this.failDo, "", this);
+                    this.cirtsClient.httpGet(fullResource, this.successDo(), this.failDo(), "", this);
                 };
                 SwaggerRoot.prototype.expectedQuery = function () {
                     var qry = HtmlHelper_1.HtmlHelper.parseQuery(this.query);
@@ -65,11 +66,17 @@ System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "..
                     var endpoint = HtmlHelper_1.HtmlHelper.build(end, qry);
                     return this.settings.host + this.settings.basePath + endpoint;
                 };
-                SwaggerRoot.prototype.successDo = function (result) {
-                    this.result = JSON.stringify(result, null, 4);
+                SwaggerRoot.prototype.successDo = function () {
+                    var self = this;
+                    return function (httpResult) {
+                        self.result = JSON.stringify(httpResult, null, 4);
+                    };
                 };
-                SwaggerRoot.prototype.failDo = function (result) {
-                    this.result = JSON.stringify(result, null, 4);
+                SwaggerRoot.prototype.failDo = function () {
+                    var self = this;
+                    return function (httpResult) {
+                        self.result = JSON.stringify(httpResult, null, 4);
+                    };
                 };
                 SwaggerRoot.prototype.output = function () {
                     var r;
@@ -82,6 +89,9 @@ System.register(['../common/HtmlHelper', 'angular2/core', 'angular2/common', "..
                         this.settings.username +
                         "\nUrl: " + this.expectedQuery() +
                         "\n" + (r || "");
+                };
+                SwaggerRoot.prototype.updateSentHash = function (s) {
+                    this.sentHash = s;
                 };
                 SwaggerRoot = __decorate([
                     core_1.Component({

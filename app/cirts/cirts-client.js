@@ -21,8 +21,8 @@ System.register(["../settings/settings"], function(exports_1, context_1) {
                     this.call('POST', resource, content, success, fail, params, output);
                 };
                 ;
-                CirtsClient.prototype.hash = function (method, resource, timestamp, nonce, contents, params) {
-                    var sig = this.signature(method, resource, timestamp, nonce, contents, params);
+                CirtsClient.prototype.hash = function (method, resource, timestamp, nonce, output) {
+                    var sig = this.signature(method, resource, timestamp, nonce);
                     var sha = new jsSHA('SHA-256', 'TEXT'); //jshint ignore:line, this is a library
                     sha.setHMACKey('MQpE1iRhe3jPfNQL/CIoRg==', 'B64');
                     sha.update(sig);
@@ -51,6 +51,8 @@ System.register(["../settings/settings"], function(exports_1, context_1) {
                     var contentString = (contents ? JSON.stringify(contents) : null);
                     var client = this;
                     var nonce = CirtsClient.generateId();
+                    var timestampString = new Date().toUTCString();
+                    var hash = client.hash(method, resource, timestampString, nonce, output);
                     jQuery.ajax(this.settings.host + this.settings.basePath + resource, {
                         method: method,
                         contentType: 'application/json',
@@ -58,9 +60,8 @@ System.register(["../settings/settings"], function(exports_1, context_1) {
                         dataType: 'json',
                         url: this.settings.basePath + resource + params,
                         beforeSend: function (xhr) {
-                            var timestampString = new Date().toUTCString();
                             xhr.setRequestHeader('Authorization', 'Basic ' + btoa(client.settings.username + ':' + client.settings.password));
-                            xhr.setRequestHeader('X-Api-Key', client.settings.apiId + ':' + client.hash(method, resource, timestampString, nonce, contentString, params));
+                            xhr.setRequestHeader('X-Api-Key', client.settings.apiId + ':' + hash);
                             xhr.setRequestHeader('X-Timestamp', timestampString);
                             xhr.setRequestHeader('X-Nonce', nonce);
                         }
@@ -68,25 +69,25 @@ System.register(["../settings/settings"], function(exports_1, context_1) {
                         .done(function (r) {
                         success(r);
                         if (output) {
-                            output.successDo(r);
+                            output.successDo()(r);
                         }
                     })
                         .fail(function (r) {
                         fail(r);
                         if (output) {
-                            output.successDo(r);
+                            output.successDo()(r);
                         }
                     });
                 };
                 ;
-                CirtsClient.prototype.signature = function (method, resource, timestamp, nonce, contents, params) {
+                CirtsClient.prototype.signature = function (method, resource, timestamp, nonce /*, contents/*, params*/) {
                     // todo: query params
                     // /Lwb.Cirts.WebService/api/Ping
                     // Mon, 15 Jun 2015 04:01:00 GMT
                     var signature = method + '\n' + this.settings.basePath + resource + '\n' + timestamp + '\n' + nonce + '\n';
-                    if (contents) {
+                    /*if (contents) {
                         signature = signature + contents + '\n';
-                    }
+                    }*/
                     return signature;
                 };
                 ;

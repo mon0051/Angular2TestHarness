@@ -276,28 +276,12 @@ paths:
               title: Client
               type: object
               properties:
-                givenNames:
-                  type: string
-                  description: |
-                    The Clients given name
-                familyName:
-                  type: string
-                  description: |
-                    Clients family name. Equivilent to surname, second name
                 cirtsId:
-                  type: string
-                  format: CLXXXXX
-                  description: |
-                    The CirtsId of the client
+                  $ref: '#/definitions/cirtsId'
+                names:
+                  $ref: '#/definitions/names'
                 dateOfBirth:
-                  type: string
-                  format: YYYYMMDD
-                  description: |
-                    Will always be returned in this format. Manipulation client side is trivial to display in other formats.
-                lwbRegion:
-                  type: string
-                  description: |
-                    The region from which LWB provides services to the client
+                  $ref: '#/definitions/dateOfBirth'
                 page:
                   $ref: '#/definitions/page'
                 pageSize:
@@ -920,29 +904,15 @@ paths:
               type: object
               properties:
                 givenNames:
-                  type: string
-                  description: |
-                    The Clients given name
+                  $ref: '#/definitions/givenNames'
                 familyName:
-                  type: string
-                  description: |
-                    Clients family name. Equivilent to surname, second name
+                  $ref: '#/definitions/familyName'
                 cirtsId:
-                  type: string
-                  format: CLXXXXX
-                  description: |
-                    The CirtsId of the client
+                  $ref: '#/definitions/cirtsId'
                 dateOfBirth:
-                  type: string
-                  format: YYYYMMDD
-                  description: |
-                    Will always be returned in this format. Manipulation client side is trivial to display in other formats.
-                lwbRegion:
-                  type: string
-                  description: |
-                    The region from which LWB provides services to the client
+                  $ref: '#/definitions/dateOfBirth'
                 personType:
-                  type: string
+                  $ref: '#/definitions/personType'
                 page:
                   $ref: '#/definitions/page'
                 pageSize:
@@ -1023,6 +993,30 @@ responses:
           type: integer
           default: 400
 definitions:
+  givenNames:
+    type: string
+    description: |
+      The Clients given name
+  familyName:
+    type: string
+    description: |
+      Clients family name. Equivilent to surname, second name
+  cirtsId:
+    type: string
+    format: CLXXXXX
+    description: |
+      The CirtsId of the client
+  dateOfBirth:
+    type: string
+    format: YYYYMMDD
+    description: |
+      Will always be returned in this format. Manipulation client side is trivial to display in other formats.
+  lwbRegion:
+    type: string
+    description: |
+      The region from which LWB provides services to the client
+  personType:
+    type: string
   page:
     description: |
       Current Page. Use in conjuction with page size to page through results
