@@ -271,23 +271,26 @@ paths:
           description: 'Successful response'
           schema:
             title: clients
-            type: array
-            items:
-              title: Client
-              type: object
-              properties:
-                cirtsId:
-                  $ref: '#/definitions/cirtsId'
-                names:
-                  $ref: '#/definitions/names'
-                dateOfBirth:
-                  $ref: '#/definitions/dateOfBirth'
-                page:
-                  $ref: '#/definitions/page'
-                pageSize:
-                  $ref: '#/definitions/pageSize'
-                totalResults:
-                  $ref: '#/definitions/totalResults'
+            type: object
+            properties:
+              clients:
+                type: array
+                items:
+                  title: client
+                  type: object
+                  properties:
+                    cirtsId:
+                      $ref: '#/definitions/cirtsId'
+                    names:
+                      $ref: '#/definitions/names'
+                    dateOfBirth:
+                      $ref: '#/definitions/dateOfBirth'
+              page:
+                $ref: '#/definitions/page'
+              pageSize:
+                $ref: '#/definitions/pageSize'
+              totalResults:
+                $ref: '#/definitions/totalResults'
         400:
           $ref: '#/responses/badRequest'
         403:
@@ -438,61 +441,45 @@ paths:
             type: object
             properties:
               cirtsId:
-                type: string
-                format: CLXXXXXX,
-                description: |
-                  The CirtsId of the client in question. Will be in the format CLXXXX
+                $ref: '#/definitions/cirtsId'
               clientName:
-                type: string
-                format: GivenNames FamilyName (Alias)
-                description: |
-                  The full name of the client, specified as GivenNames FamilyName (Alias)
+                $ref: '#/definitions/names'
               dateOfBirth:
-                type: string
-                format: YYYYMMDD
-                description: |
-                  Age can be calculated using this value. May be an estimate.
+                $ref: '#/definitions/dateOfBirth'
               dobEstimated:
                 type: boolean
                 description: |
                   True if the date of birth was estimated rather than taken from records
-              primaryLanguage:
-                type: string
-                description: |
-                  The primary language spoken by the client
               gender:
-                type: string
-                description: |
-                  The gender of the client. Valid values are Male, Female, Unknown, None and Other. A value of None
-                  means that a gender was never entered into the system, or the information on the clients gender
-                  could not be found. A value of Unknown means a value was entered into the system, but was specified
-                  as Unknown (Possibly automatically). A value of Other means the gender was specified, but was not
-                  fit either Male or Female.
+                $ref: '#/definitions/gender'
               indigenousStatus:
                 type: string
                 description: |
                   Will specify what kind of indigenous status client has, or none.
-              phoneNumber:
-                type: string
-                description: |
-                  As phone numbers are often given with brackets and non-numerical prefixes, this is a string
-                  and not a number as might be expected.
-              primaryServiceType:
-                type: string
-                description: |
-                  The Primary service that is provided by LWB to the client
-              medicare:
-                type: string
-                description: |
-                  The Medicare status of the client. Can be a number of predefined values.
+              lwbRegion:
+                $ref: '#/definitions/lwbRegion'
               lwbStatus:
                 type: boolean
                 description: |
                   True is client is currently active
-              lwbRegion:
+              medicare:
                 type: string
                 description: |
-                  Associated LWB region of client. Regions are contained in States.
+                  The Medicare status of the client. Can be a number of predefined values.
+              phoneNumber:
+                $ref: '#/definitions/phoneNumber'
+              primaryLanguage:
+                type: string
+                description: |
+                  The primary language spoken by the client
+              primaryServiceType:
+                type: string
+                description: |
+                  The Primary service that is provided by LWB to the client
+              lwbKeyWorker:
+                type: string
+                description: |
+                  The name and CirtsId of the KeyWorker associated with this client
         400:
           $ref: '#/responses/badRequest'
         403:
@@ -514,10 +501,6 @@ paths:
         type: string
         required: true
         format: CLXXXX
-      -
-        $ref: '#/parameters/pageParam'
-      -
-        $ref: '#/parameters/pageSizeParam'
       responses:
         200:
           description: |
@@ -532,60 +515,6 @@ paths:
                   type: string
                   description: |
                     Name of client sector
-                page:
-                  $ref: '#/definitions/page'
-                pageSize:
-                  $ref: '#/definitions/pageSize'
-                totalResults:
-                  $ref: '#/definitions/totalResults'
-        400:
-          $ref: '#/responses/badRequest'
-        403:
-          $ref: '#/responses/forbiddenError'
-        404:
-          $ref: '#/responses/notFoundError'
-        500:
-          $ref: '#/responses/serverError'
-  /clients/{cirtsId}/workers:
-    get:
-      parameters:
-      -
-        name: cirtsId
-        in: path
-        description: |
-          Client CirtsId. Must be provided with alphabetic prefix. eg. CL1000 is valid 1000 is not valid.
-        type: string
-        required: true
-        format: CLXXXX
-      -
-        $ref: '#/parameters/pageParam'
-      -
-        $ref: '#/parameters/pageSizeParam'
-      responses:
-        200:
-          description: |
-            Workers associated with given client
-          schema:
-            title: KeyWorker
-            type: object
-            properties:
-              givenNames:
-                type: string
-                description: |
-                  Given Names of the worker
-              familyName:
-                type: string
-                description: |
-                  Family name of the Worker
-              workerId:
-                type: string
-                format: WXXXXX
-              page:
-                $ref: '#/definitions/page'
-              pageSize:
-                $ref: '#/definitions/pageSize'
-              totalResults:
-                $ref: '#/definitions/totalResults'
         400:
           $ref: '#/responses/badRequest'
         403:
@@ -674,52 +603,49 @@ paths:
           required: true
           description:
             $ref: "#/parameters/cirtsIdParam/description"
-        -
-          $ref: '#/parameters/pageParam'
-        -
-          $ref: '#/parameters/pageSizeParam'
         responses:
           200:
             description: |
               The clients social/family network members
             schema:
-              title: KeyWorker
+              title: familyNetwork
               type: object
               properties:
-                name:
-                  type: string
-                  description: |
-                    Full name of the network connection (a network connection is a person associated with the client).
-                category:
-                  type: string
-                  description: |
-                    The type of connection. eg. Parent, sibling etc
-                connection:
-                  type: string
-                  description: |
-                    A finer grain version of category, this will be Father, Mother, Brother, Sister etc.
-                status:
-                  type: string
-                  description: |
-                    Active/Inactive flag.
-                contactType:
-                  type: string
-                  description: |
-                    How this contact is made with this network connection. eg Phone, email, face to face etc. Set to unrestricted by default.
-                phoneNumber:
-                  type: string
-                  description: |
-                    The phone number may have been entered in various formats, eg (00) 0000 0000, 0000000000, 000000000, +61000000000. Will be returned as entered.
-                keyConnectionInformation:
-                  type: string
-                  description: |
-                    Important information about relation to client, eg Primary Care Giver, Emergency Contact
-                page:
-                  $ref: '#/definitions/page'
-                pageSize:
-                  $ref: '#/definitions/pageSize'
-                totalResults:
-                  $ref: '#/definitions/totalResults'
+                family:
+                  title: family
+                  type: array
+                  items:
+                    title: familyMember
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: |
+                          Full name of the network connection (a network connection is a person associated with the client).
+                      category:
+                        type: string
+                        description: |
+                          The type of connection. eg. Parent, sibling etc
+                      connection:
+                        type: string
+                        description: |
+                          A finer grain version of category, this will be Father, Mother, Brother, Sister etc.
+                      status:
+                        type: string
+                        description: |
+                          Active/Inactive flag.
+                      contactType:
+                        type: string
+                        description: |
+                          How this contact is made with this network connection. eg Phone, email, face to face etc. Set to unrestricted by default.
+                      phoneNumber:
+                        type: string
+                        description: |
+                          The phone number may have been entered in various formats, eg (00) 0000 0000, 0000000000, 000000000, +61000000000. Will be returned as entered.
+                      keyConnectionInformation:
+                        type: string
+                        description: |
+                          Important information about relation to client, eg Primary Care Giver, Emergency Contact
           400:
             $ref: '#/responses/badRequest'
           403:
@@ -751,35 +677,16 @@ paths:
               title: KeyWorker
               type: object
               properties:
-                name:
+                cirtsId:
+                  $ref: '#/definitions/cirtsId'
+                names:
+                  $ref: '#/definitions/names'
+                dateOfBirth:
+                  $ref: '#/definitions/dateOfBirth'
+                personType:
                   type: string
                   description: |
-                    Full name of the network connection (a network connection is a person associated with the client).
-                category:
-                  type: string
-                  description: |
-                    The type of connection. eg. Parent, sibling etc
-                connection:
-                  type: string
-                  description: |
-                    A finer grain version of category, this will be Father, Mother, Brother, Sister etc.
-                status:
-                  type: string
-                  description: |
-                    Active/Inactive flag.
-                contactType:
-                  type: string
-                  description: |
-                    How this contact is made with this network connection. eg Phone, email, face to face etc. Set to unrestricted by default.
-                phoneNumber:
-                  type: string
-                  description: |
-                    The phone number may have been entered in various formats, eg (00) 0000 0000, 0000000000, 000000000, +61000000000.
-                    Will be returned as entered.
-                keyConnectionInformation:
-                  type: string
-                  description: |
-                    Important information about relation to client, eg Primary Care Giver, Emergency Contact
+                    Either Client, Carer, Worker, Person. It would be expected however that all results for this
                 page:
                   $ref: '#/definitions/page'
                 pageSize:
@@ -808,61 +715,65 @@ paths:
           description: |
             Clients and Carers in the caseload of the given username
           schema:
-            title: caseload
-            type: array
-            items:
-              title: caseload
-              type: object
-              properties:
-                cirtsId:
-                  type: string
-                  description: |
-                    The cirts id of the client or carer in the caseload. The prefix will determine if this is a client or carer.
-                givenNames:
-                  type: string
-                  description: |
-                    The given names of the client or carer
-                familyName:
-                  type: string
-                  description: |
-                    The family name of the given client or carer
-                dateOfBirth:
-                  type: string
-                  format: YYYYMMDD
-                  description: |
-                    Age can be calculated using this value. May be an estimate.
-                gender:
-                  type: string
-                  description: |
-                    The gender of the client. Valid values are Male, Female, Unknown, None and Other. A value of None
-                    means that a gender was never entered into the system, or the information on the clients gender
-                    could not be found. A value of Unknown means a value was entered into the system, but was specified
-                    as Unknown (Possibly automatically). A value of Other means the gender was specified, but was not
-                    fit either Male or Female.
-                preferredPhoneNumber:
-                  type: string
-                  format: As stored in database
-                  description: |
-                    The prefered contact number of the client or carer. Can be stored in various formats
-                    (eg (00) 0000 0000, 0000000000, +00000000000, 00 00000000), and will be returned as entered.
-                suburb:
-                  type: string
-                  description: |
-                    The suburb the client / carer is from. Will be returned as a simple text value.
-                state:
-                  type: string
-                  description: |
-                    The state the client/carer is from. Will be returned as a simple text value.
-                status:
-                  type: string
-                  description: |
-                    The status of client / carer. Valid values are active and inactive.
-                page:
-                  $ref: '#/definitions/page'
-                pageSize:
-                  $ref: '#/definitions/pageSize'
-                totalResults:
-                  $ref: '#/definitions/totalResults'
+            title: caseloadResponse
+            type: object
+            properties:
+              caseload:
+                title: caseload
+                type: array
+                items:
+                  title: person
+                  type: object
+                  properties:
+                    cirtsId:
+                      type: string
+                      description: |
+                        The cirts id of the client or carer in the caseload. The prefix will determine if this is a client or carer.
+                    givenNames:
+                      type: string
+                      description: |
+                        The given names of the client or carer
+                    familyName:
+                      type: string
+                      description: |
+                        The family name of the given client or carer
+                    dateOfBirth:
+                      type: string
+                      format: YYYYMMDD
+                      description: |
+                        Age can be calculated using this value. May be an estimate.
+                    gender:
+                      type: string
+                      description: |
+                        The gender of the client. Valid values are Male, Female, Unknown, None and Other. A value of None
+                        means that a gender was never entered into the system, or the information on the clients gender
+                        could not be found. A value of Unknown means a value was entered into the system, but was specified
+                        as Unknown (Possibly automatically). A value of Other means the gender was specified, but was not
+                        fit either Male or Female.
+                    preferredPhoneNumber:
+                      type: string
+                      format: As stored in database
+                      description: |
+                        The prefered contact number of the client or carer. Can be stored in various formats
+                        (eg (00) 0000 0000, 0000000000, +00000000000, 00 00000000), and will be returned as entered.
+                    suburb:
+                      type: string
+                      description: |
+                        The suburb the client / carer is from. Will be returned as a simple text value.
+                    state:
+                      type: string
+                      description: |
+                        The state the client/carer is from. Will be returned as a simple text value.
+                    status:
+                      type: string
+                      description: |
+                        The status of client / carer. Valid values are active and inactive.
+              page:
+                $ref: '#/definitions/page'
+              pageSize:
+                $ref: '#/definitions/pageSize'
+              totalResults:
+                $ref: '#/definitions/totalResults'
   /person:
     get:
       parameters:
@@ -993,10 +904,27 @@ responses:
           type: integer
           default: 400
 definitions:
+  names:
+    type: string
+    description: |
+      The names of the person in question. In the form GivenNames Lastname (Alias)
   givenNames:
     type: string
     description: |
       The Clients given name
+  gender:
+    type: string
+    description: |
+      The gender of the client. Valid values are Male, Female, Unknown, None and Other. A value of None
+      means that a gender was never entered into the system, or the information on the clients gender
+      could not be found. A value of Unknown means a value was entered into the system, but was specified
+      as Unknown (Possibly automatically). A value of Other means the gender was specified, but was not
+      fit either Male or Female.
+  phoneNumber:
+    type: string
+    description: |
+      As phone numbers are often given with brackets and non-numerical prefixes, this is a string
+      and not a number as might be expected.
   familyName:
     type: string
     description: |
