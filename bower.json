@@ -1,0 +1,20 @@
+{
+  "name": "Angular2TestHarness",
+  "description": "A Test Harness for swagger API's using Angular2",
+  "main": "",
+  "authors": [
+    "Andrew Monteith <andrew.monteith@kiandra.com.au>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/mon0051/Angular2TestHarness",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "swagger-tools": "^0.10.1"
+  }
+}

@@ -5,25 +5,26 @@
   "description": "A Test Harness for swagger API's using Angular2",
   "dependencies": {
     "angular2": "2.0.0-beta.12",
-    "systemjs": "0.19.24",
+    "bootstrap": "4.0.0-alpha.2",
+    "bower": "^1.7.9",
     "es6-shim": "^0.35.0",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
-    "zone.js": "0.6.6",
-    "bootstrap": "4.0.0-alpha.2"
+    "systemjs": "0.19.24",
+    "zone.js": "0.6.6"
   },
   "devDependencies": {
-    "jquery.2" : "",
-    "yamljs":"",
+    "jquery.2": "",
+    "yamljs": "",
     "concurrently": "^2.0.0",
     "lite-server": "^2.1.0",
     "typescript": "^1.8.9",
     "typings": "^0.7.9",
-    "tether":"",
-    "bootstrap":"4.0.0-alpha.2",
-    "protractor":"",
-    "swagger-cli": "",
-    "node-sass":"*"
+    "tether": "",
+    "bootstrap": "4.0.0-alpha.2",
+    "protractor": "",
+    "swagger-tools": "",
+    "node-sass": "*"
   },
   "scripts": {
     "postinstall": "npm run typings install",

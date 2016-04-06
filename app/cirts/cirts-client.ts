@@ -81,11 +81,11 @@ export class CirtsClient {
 			});
 	};
 
-	signature(method, resource, timestamp, nonce/*, contents/*, params*/) {
+	signature(timestamp, nonce) {
 		// todo: query params
 		// /Lwb.Cirts.WebService/api/Ping
 		// Mon, 15 Jun 2015 04:01:00 GMT
-		var signature = method + '\n' + this.settings.basePath + resource + '\n' + timestamp + '\n' + nonce + '\n';
+		var signature = timestamp + '\n' + nonce + '\n';
 		/*if (contents) {
 			signature = signature + contents + '\n';
 		}*/

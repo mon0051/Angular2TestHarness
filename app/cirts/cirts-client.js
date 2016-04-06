@@ -80,11 +80,11 @@ System.register(["../settings/settings"], function(exports_1, context_1) {
                     });
                 };
                 ;
-                CirtsClient.prototype.signature = function (method, resource, timestamp, nonce /*, contents/*, params*/) {
+                CirtsClient.prototype.signature = function (timestamp, nonce) {
                     // todo: query params
                     // /Lwb.Cirts.WebService/api/Ping
                     // Mon, 15 Jun 2015 04:01:00 GMT
-                    var signature = method + '\n' + this.settings.basePath + resource + '\n' + timestamp + '\n' + nonce + '\n';
+                    var signature = timestamp + '\n' + nonce + '\n';
                     /*if (contents) {
                         signature = signature + contents + '\n';
                     }*/

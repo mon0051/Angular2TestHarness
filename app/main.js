@@ -1,4 +1,4 @@
-System.register(["angular2/core", "angular2/platform/browser", "./swagger/swagger", "angular2/router", "./test/auto-test-runner"], function(exports_1, context_1) {
+System.register(["angular2/core", "angular2/platform/browser", "./swagger/swagger", "angular2/router", "./test/auto-test-runner", "./test/swagger-validate"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(["angular2/core", "angular2/platform/browser", "./swagger/swagge
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, browser_1, swagger_1, router_1, auto_test_runner_1;
+    var core_1, browser_1, swagger_1, router_1, auto_test_runner_1, swagger_validate_1;
     var AppRoot;
     return {
         setters:[
@@ -28,10 +28,14 @@ System.register(["angular2/core", "angular2/platform/browser", "./swagger/swagge
             },
             function (auto_test_runner_1_1) {
                 auto_test_runner_1 = auto_test_runner_1_1;
+            },
+            function (swagger_validate_1_1) {
+                swagger_validate_1 = swagger_validate_1_1;
             }],
         execute: function() {
             AppRoot = (function () {
                 function AppRoot() {
+                    var p = new swagger_validate_1.SwaggerValidator();
                 }
                 AppRoot = __decorate([
                     core_1.Component({
@@ -40,7 +44,7 @@ System.register(["angular2/core", "angular2/platform/browser", "./swagger/swagge
                         templateUrl: "app/page-template.html"
                     }),
                     router_1.RouteConfig([
-                        { path: "/", name: 'SwaggerRoot', component: swagger_1.SwaggerRoot },
+                        { path: "/", name: 'TestHarness', component: swagger_1.SwaggerRoot },
                         { path: "/autoTests", name: "AutoTests", component: auto_test_runner_1.AutoTestRunner }
                     ]), 
                     __metadata('design:paramtypes', [])
